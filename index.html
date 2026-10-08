@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -50,8 +51,8 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
   <p class="sub">Cargá las valoraciones negativas y positivas: calcula tu porcentaje actual y cuántas positivas te faltan para llegar al objetivo.</p>
   <div class="card">
     <div class="row">
-      <div><label for="neg">Negativas</label><input id="neg" type="number" min="0" step="1" value="0" placeholder="0" inputmode="numeric"></div>
-      <div><label for="pos">Positivas</label><input id="pos" type="number" min="0" step="1" value="25" placeholder="0" inputmode="numeric"></div>
+      <div><label for="neg">Negativas</label><input id="neg" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
+      <div><label for="pos">Positivas</label><input id="pos" type="number" min="0" step="1" value="25" inputmode="numeric"></div>
       <div><label for="obj">Objetivo (%)</label><input id="obj" type="number" min="1" max="100" step="0.1" value="98" inputmode="decimal"></div>
     </div>
     <div class="presets" aria-label="Objetivos frecuentes">
@@ -99,12 +100,15 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
   });
 
   function calc(){
-    // Tratamos campos vacíos de forma segura como 0
-    var negVal = $('neg').value.trim();
-    var posVal = $('pos').value.trim();
-    
-    var n = negVal === '' ? 0 : Math.max(0, Math.floor(+negVal || 0)),
-        p = posVal === '' ? 0 : Math.max(0, Math.floor(+posVal || 0)),
+    var negInput = $('neg');
+    var posInput = $('pos');
+
+    // Si el usuario borra por completo y queda vacío, rellenamos visualmente con 0
+    if(negInput.value.trim() === '') { negInput.value = '0'; }
+    if(posInput.value.trim() === '') { posInput.value = '0'; }
+
+    var n = Math.max(0, Math.floor(+negInput.value || 0)),
+        p = Math.max(0, Math.floor(+posInput.value || 0)),
         raw = parseFloat(String($('obj').value).replace(',','.')),
         op = Math.min(100, Math.max(1, isNaN(raw) ? 94 : raw)),
         o = op / 100, 
