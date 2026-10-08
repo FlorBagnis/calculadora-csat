@@ -39,11 +39,23 @@ input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px so
 .signature{font-weight:700;color:var(--accent)}
 @media (max-width:480px){.row{grid-template-columns:1fr}h1{font-size:20px}}
 .pdf-wrap{position:absolute;top:0;left:0;z-index:-1;pointer-events:none}
-.pdf-mode{width:794px;max-width:none;padding:36px}
-.pdf-mode h1{font-size:28px}
-.pdf-mode p.sub{font-size:15px}
-.pdf-mode .row{grid-template-columns:1fr 1fr 1fr}
-.pdf-mode .res{grid-template-columns:1fr 1fr}
+.pdf-page{width:794px;height:1122px;box-sizing:border-box;position:relative;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;padding:64px 48px}
+.pdf-page h1{font-size:30px;font-weight:800;margin:0 0 8px;text-transform:uppercase;letter-spacing:.01em}
+.pdf-page .psub{font-size:14px;color:var(--mute);margin:0}
+.pdf-kpis{display:flex;gap:14px;margin-top:48px}
+.pdf-kpi{flex:1;box-sizing:border-box;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:18px 16px;min-height:96px}
+.pdf-kpi .l{font-size:10.5px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.pdf-kpi .v{font-size:22px;font-weight:800}
+.pdf-table{width:100%;border-collapse:collapse;margin-top:40px;font-size:13px}
+.pdf-table th{background:var(--accent);color:#fff;text-align:left;padding:14px 16px;font-size:11.5px;letter-spacing:.04em}
+.pdf-table td{padding:15px 16px;border-bottom:1px solid var(--line);color:var(--ink)}
+.pdf-table td.m{color:var(--mute)}
+.pdf-table th:last-child,.pdf-table td:last-child{text-align:right;font-weight:700}
+.pdf-h2{font-size:17px;font-weight:800;text-transform:uppercase;margin:44px 0 16px}
+.pdf-box{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--card);border-radius:16px;padding:24px 26px}
+.pdf-box .t{font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+.pdf-box p{margin:0;font-size:13.5px;line-height:1.6}
+.pdf-foot{position:absolute;left:48px;bottom:38px;font-size:12px;color:var(--mute)}
 </style>
 </head>
 <body>
@@ -103,35 +115,64 @@ input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px so
     updateThemeButton();
   });
 
-  // Exporta el PDF desde una copia con layout fijo de escritorio (794px), así sale igual
-  // en celular y en compu. Página a medida del contenido: sin blancos. Descarga directa.
+  // PDF estilo "Mensuales": hoja A4 vertical con tarjetas y tabla, en los colores del tema activo.
   function generateCsatPDF(){
-    var src=$('pdfArea');
-    var bg=getComputedStyle(src).backgroundColor;
+    var n=Math.max(0,Math.floor(+$('neg').value||0)),
+        p=Math.max(0,Math.floor(+$('pos').value||0)),
+        raw=parseFloat(String($('obj').value).replace(',','.')),
+        op=Math.min(100,Math.max(1,isNaN(raw)?94:raw)),
+        label=String(op).replace('.',',')+'%',
+        pct=$('pct').textContent, tot=$('tot').textContent,
+        need=$('need').textContent, miss=$('miss').textContent,
+        msg=$('msg').textContent;
+    var fecha=new Date().toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+    fecha=fecha.charAt(0).toUpperCase()+fecha.slice(1);
+
+    var html=
+      '<div class="pdf-page">'+
+        '<h1>Calculadora de métricas CSAT</h1>'+
+        '<p class="psub">Reporte - '+fecha+'</p>'+
+        '<div class="pdf-kpis">'+
+          '<div class="pdf-kpi"><div class="l">CSAT actual</div><div class="v">'+pct+'</div></div>'+
+          '<div class="pdf-kpi"><div class="l">Valoraciones</div><div class="v">'+tot+'</div></div>'+
+          '<div class="pdf-kpi"><div class="l">Objetivo</div><div class="v">'+label+'</div></div>'+
+          '<div class="pdf-kpi"><div class="l">Te faltan</div><div class="v">'+miss+'</div></div>'+
+        '</div>'+
+        '<table class="pdf-table"><thead><tr><th>MÉTRICA</th><th>DETALLE</th><th>VALOR</th></tr></thead><tbody>'+
+          '<tr><td>Valoraciones positivas</td><td class="m">Cargadas</td><td>'+p+'</td></tr>'+
+          '<tr><td>Valoraciones negativas</td><td class="m">Cargadas</td><td>'+n+'</td></tr>'+
+          '<tr><td>Total de valoraciones</td><td class="m">Positivas + negativas</td><td>'+tot+'</td></tr>'+
+          '<tr><td>Objetivo de CSAT</td><td class="m">Meta definida</td><td>'+label+'</td></tr>'+
+          '<tr><td>Positivas necesarias</td><td class="m">En total para el objetivo</td><td>'+need+'</td></tr>'+
+          '<tr><td>Positivas extra</td><td class="m">Que faltan sumar</td><td>'+miss+'</td></tr>'+
+        '</tbody></table>'+
+        '<div class="pdf-h2">Resumen del período</div>'+
+        '<div class="pdf-box"><div class="t">Análisis de resultados</div>'+
+          '<p>Con '+tot+' valoraciones registradas ('+p+' positivas y '+n+' negativas), tu CSAT actual es de '+pct+'. '+msg+'</p></div>'+
+        '<div class="pdf-foot">CSAT - Creado por Flor Bagnis</div>'+
+      '</div>';
+
     var wrap=document.createElement('div');
     wrap.className='pdf-wrap';
-    var clone=src.cloneNode(true);
-    clone.removeAttribute('id');
-    clone.classList.add('pdf-mode');
-    var ar=clone.querySelector('.actions-row'); if(ar) ar.remove();
-    ['neg','pos','obj'].forEach(function(id){
-      var c=clone.querySelector('#'+id); if(c){c.setAttribute('value',$(id).value);c.value=$(id).value;}
-    });
-    wrap.appendChild(clone);
+    wrap.innerHTML=html;
     document.body.appendChild(wrap);
     window.scrollTo(0,0);
+    var page=wrap.firstChild;
+    var bg=getComputedStyle(page).backgroundColor;
 
-    var w=Math.ceil(clone.offsetWidth), h=Math.ceil(clone.offsetHeight);
     var opt={
       margin:0,
       filename:'Reporte_CSAT_Flor_Bagnis.pdf',
       image:{type:'jpeg',quality:0.98},
-      html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0,width:w,height:h,windowWidth:w},
-      jsPDF:{unit:'px',format:[w,h],orientation:(w>h?'landscape':'portrait'),hotfixes:['px_scaling']},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0,width:794,height:1122,windowWidth:794},
+      jsPDF:{unit:'px',format:[794,1123],orientation:'portrait',hotfixes:['px_scaling']},
       pagebreak:{mode:[]}
     };
     var done=function(){ wrap.remove(); };
-    html2pdf().set(opt).from(clone).save().then(done,done);
+    html2pdf().set(opt).from(page).toPdf().get('pdf').then(function(pdf){
+      // por redondeo puede sobrar una hoja vacía: se elimina
+      while(pdf.internal.getNumberOfPages()>1){ pdf.deletePage(pdf.internal.getNumberOfPages()); }
+    }).save().then(done,done);
   }
   $('pdfBtn').addEventListener('click',generateCsatPDF);
 
