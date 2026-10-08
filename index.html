@@ -4,115 +4,227 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
+<!-- Librería html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}}
 :root[data-theme="light"]{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c}
 :root[data-theme="dark"]{--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-main{max-width:560px;width:100%;margin:0 auto;padding:28px 18px 40px}
-.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.actions-row{display:flex;gap:8px;align-items:center}
-.btn-action{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.btn-action:hover{border-color:var(--accent)}
-.tag{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
-h1{font-size:24px;margin:6px 0 6px}
-p.sub{color:var(--mute);margin:0 0 20px;font-size:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
-.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-label{display:block;font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px}
-input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
-.presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;font-size:12px;color:var(--mute)}
-.presets button{font:inherit;font-weight:700;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);cursor:pointer}
-.presets button.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.res{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.k{border:1px solid var(--line);border-radius:10px;padding:12px}
-.k b{display:block;font-size:26px}
-.k span{font-size:12px;color:var(--mute)}
-.big{grid-column:1/-1;border-left:4px solid var(--accent)}
-.msg{margin-top:16px;padding:12px 14px;border-radius:10px;font-weight:700;font-size:14px}
-.msg.ok{background:rgba(31,157,99,.14);color:var(--ok)}
-.msg.no{background:rgba(194,65,12,.14);color:var(--warn)}
-.note{font-size:12px;color:var(--mute);margin-top:18px;display:flex;flex-direction:column;gap:4px}
-.signature{font-weight:700;color:var(--accent)}
-
-/* ESTILOS DE IMPRESIÓN NATIVOS: Forzamos fondo pleno y sin márgenes blancos */
-@media print {
-  @page {
-    size: auto;
-    margin: 0mm;
-  }
-  body {
-    background-color: var(--bg) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  main {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 24px !important;
-    background-color: var(--bg) !important;
-  }
-  .actions-row, .presets {
-    display: none !important;
-  }
-  .card {
-    background-color: var(--card) !important;
-    border: 1px solid var(--line) !important;
-  }
-  input {
-    background-color: var(--bg) !important;
-    color: var(--ink) !important;
-    border: 1px solid var(--line) !important;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+}
+main {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.pdf-container {
+  width: 100%;
+  max-width: 560px;
+  background: var(--bg);
+  box-sizing: border-box;
+}
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.actions-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn-action {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.btn-action:hover {
+  border-color: var(--accent);
+}
+.tag {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .06em;
+}
+h1 {
+  font-size: 24px;
+  margin: 6px 0 6px;
+}
+p.sub {
+  color: var(--mute);
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mute);
+  margin-bottom: 6px;
+}
+input {
+  width: 100%;
+  font-size: 18px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--mute);
+}
+.presets button {
+  font: inherit;
+  font-weight: 700;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+.presets button.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.res {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.k {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+}
+.k b {
+  display: block;
+  font-size: 26px;
+}
+.k span {
+  font-size: 12px;
+  color: var(--mute);
+}
+.big {
+  grid-column: 1/-1;
+  border-left: 4px solid var(--accent);
+}
+.msg {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.msg.ok {
+  background: rgba(31,157,99,.14);
+  color: var(--ok);
+}
+.msg.no {
+  background: rgba(194,65,12,.14);
+  color: var(--warn);
+}
+.note {
+  font-size: 12px;
+  color: var(--mute);
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.signature {
+  font-weight: 700;
+  color: var(--accent);
 }
 
-@media (max-width:480px){
-  .row{grid-template-columns:1fr}
-  h1{font-size:21px}
-  main{padding:16px 12px 30px}
+@media (max-width: 480px) {
+  .row { grid-template-columns: 1fr; }
+  h1 { font-size: 21px; }
+  main { padding: 16px 10px; }
 }
 </style>
 </head>
 <body>
 <main>
-  <div class="header-row">
-    <div>
-      <div class="tag">HERRAMIENTA DE SOPORTE</div>
-      <h1>Calculadora de métricas CSAT</h1>
+  <div id="pdfArea" class="pdf-container">
+    <div class="header-row">
+      <div>
+        <div class="tag">HERRAMIENTA DE SOPORTE</div>
+        <h1>Calculadora de métricas CSAT</h1>
+      </div>
+      <div class="actions-row">
+        <button type="button" id="pdfBtn" class="btn-action" aria-label="Exportar a PDF">📥 PDF</button>
+        <button type="button" id="themeBtn" class="btn-action" aria-label="Cambiar tema">🌸 Modo Claro</button>
+      </div>
     </div>
-    <div class="actions-row">
-      <button type="button" id="pdfBtn" class="btn-action" aria-label="Exportar a PDF">📥 PDF</button>
-      <button type="button" id="themeBtn" class="btn-action" aria-label="Cambiar tema">🌸 Modo Claro</button>
+    <p class="sub">Cargá las valoraciones negativas y positivas: calcula tu porcentaje actual y cuántas positivas te faltan para llegar al objetivo.</p>
+    <div class="card">
+      <div class="row">
+        <div><label for="neg">Negativas</label><input id="neg" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
+        <div><label for="pos">Positivas</label><input id="pos" type="number" min="0" step="1" value="25" inputmode="numeric"></div>
+        <div><label for="obj">Objetivo (%)</label><input id="obj" type="number" min="1" max="100" step="0.1" value="98" inputmode="decimal"></div>
+      </div>
+      <div class="presets" aria-label="Objetivos frecuentes">
+        <span>Objetivos frecuentes:</span>
+        <button type="button" data-o="90">90%</button><button type="button" data-o="92">92%</button><button type="button" data-o="94">94%</button><button type="button" data-o="95">95%</button><button type="button" data-o="96">96%</button><button type="button" data-o="98">98%</button><button type="button" data-o="100">100%</button>
+      </div>
+      <div class="res">
+        <div class="k big"><b id="pct">–</b><span>% actual de CSAT</span></div>
+        <div class="k"><b id="tot">–</b><span>Total de valoraciones</span></div>
+        <div class="k"><b id="need">–</b><span>Positivas necesarias en total</span></div>
+        <div class="k big"><b id="miss">–</b><span>Positivas extra que te faltan sumar</span></div>
+      </div>
+      <div id="msg" class="msg ok"></div>
     </div>
-  </div>
-  <p class="sub">Cargá las valoraciones negativas y positivas: calcula tu porcentaje actual y cuántas positivas te faltan para llegar al objetivo.</p>
-  <div class="card">
-    <div class="row">
-      <div><label for="neg">Negativas</label><input id="neg" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
-      <div><label for="pos">Positivas</label><input id="pos" type="number" min="0" step="1" value="25" inputmode="numeric"></div>
-      <div><label for="obj">Objetivo (%)</label><input id="obj" type="number" min="1" max="100" step="0.1" value="98" inputmode="decimal"></div>
+    <div class="note">
+      <span>Versión web de la calculadora de Excel que armé para seguir mi CSAT y que compartí con mis compañeros para entender las métricas.</span>
+      <span class="signature">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
     </div>
-    <div class="presets" aria-label="Objetivos frecuentes">
-      <span>Objetivos frecuentes:</span>
-      <button type="button" data-o="90">90%</button><button type="button" data-o="92">92%</button><button type="button" data-o="94">94%</button><button type="button" data-o="95">95%</button><button type="button" data-o="96">96%</button><button type="button" data-o="98">98%</button><button type="button" data-o="100">100%</button>
-    </div>
-    <div class="res">
-      <div class="k big"><b id="pct">–</b><span>% actual de CSAT</span></div>
-      <div class="k"><b id="tot">–</b><span>Total de valoraciones</span></div>
-      <div class="k"><b id="need">–</b><span>Positivas necesarias en total</span></div>
-      <div class="k big"><b id="miss">–</b><span>Positivas extra que te faltan sumar</span></div>
-    </div>
-    <div id="msg" class="msg ok"></div>
-  </div>
-  <div class="note">
-    <span>Versión web de la calculadora de Excel que armé para seguir mi CSAT y que compartí con mis compañeros para entender las métricas.</span>
-    <span class="signature">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
   </div>
 </main>
 <script>
@@ -121,7 +233,6 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
   
   var htmlEl = document.documentElement;
   var themeBtn = $('themeBtn');
-  var pdfBtn = $('pdfBtn');
   var savedTheme = localStorage.getItem('csat_theme');
   
   if(savedTheme){
@@ -146,9 +257,32 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
     updateThemeButton();
   });
 
-  pdfBtn.addEventListener('click', function(){
-    window.print();
-  });
+  // Función dedicada para exportar PDF idéntica en estructura a Mensuales
+  function generateCsatPDF() {
+    var element = $('pdfArea');
+    var actionsRow = document.querySelector('.actions-row');
+    actionsRow.style.display = 'none';
+
+    var currentBg = getComputedStyle(htmlEl).getPropertyValue('--bg').trim();
+    document.body.style.backgroundColor = currentBg;
+    element.style.backgroundColor = currentBg;
+
+    var opt = {
+      margin:       0,
+      filename:     'Reporte_CSAT_Flor_Bagnis.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: currentBg, windowWidth: element.scrollWidth },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().from(element).set(opt).save().then(function(){
+      actionsRow.style.display = 'flex';
+    }).catch(function(){
+      actionsRow.style.display = 'flex';
+    });
+  }
+
+  $("pdfBtn")?.addEventListener("click", generateCsatPDF);
 
   function calc(){
     var negInput = $('neg');
