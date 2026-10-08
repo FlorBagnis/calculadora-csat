@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
-<!-- Librería html2pdf -->
+<!-- Librería html2pdf profesional -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
@@ -15,8 +15,8 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45}
-main{max-width:100%;width:100%;margin:0 auto;padding:28px 24px 40px;background:var(--bg)}
-.content-wrapper{max-width:560px;margin:0 auto}
+main{max-width:100%;width:100%;margin:0 auto;padding:32px 20px;background:var(--bg);min-height:100vh}
+.pdf-container{max-width:560px;margin:0 auto;background:var(--bg);padding:10px}
 .header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .actions-row{display:flex;gap:8px;align-items:center}
 .btn-action{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
@@ -45,13 +45,13 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
 @media (max-width:480px){
   .row{grid-template-columns:1fr}
   h1{font-size:21px}
-  main{padding:16px 12px 30px}
+  main{padding:16px 12px}
 }
 </style>
 </head>
 <body>
-<main id="captureArea">
-  <div class="content-wrapper">
+<main id="mainBg">
+  <div id="pdfArea" class="pdf-container">
     <div class="header-row">
       <div>
         <div class="tag">HERRAMIENTA DE SOPORTE</div>
@@ -118,20 +118,22 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
     updateThemeButton();
   });
 
-  // PDF con color de fondo dinámico (claro u oscuro) y sin bordes blancos
+  // Exportación adaptada al tema actual (oscuro o claro) sin blancos molestos
   pdfBtn.addEventListener('click', function(){
-    var element = $('captureArea');
+    var element = $('pdfArea');
     var actionsRow = document.querySelector('.actions-row');
     actionsRow.style.display = 'none';
 
-    // Capturamos dinámicamente el color de fondo actual del tema (--bg)
+    // Capturamos en tiempo real el color de fondo exacto del tema activo
     var currentBg = getComputedStyle(htmlEl).getPropertyValue('--bg').trim();
+    $('mainBg').style.backgroundColor = currentBg;
+    element.style.backgroundColor = currentBg;
 
     var opt = {
       margin:       0,
       filename:     'Reporte_CSAT_Flor_Bagnis.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, backgroundColor: currentBg },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: currentBg, scrollX: 0, scrollY: 0 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
