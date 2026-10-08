@@ -18,15 +18,17 @@ La idea surgió a partir de mi experiencia como **Support Guru en Tiendanube**, 
 
 ---
 
-### 🔄 Del Excel a la web
+## 🔄 Del Excel a la web
 
 | | Excel (original) | Versión web |
 |---|---|---|
 | **Cómo se usa** | Se descarga y se abre en Excel | Se abre desde un link, en cualquier dispositivo |
 | **Objetivo de CSAT** | Celda editable | Campo editable + botones de objetivos frecuentes |
 | **Para compartir** | Hay que enviar el archivo | Alcanza con pasar el link |
+| **Seguimiento** | Se conserva manualmente en el archivo | Permite exportar los resultados en PDF |
+| **Presentación** | Depende del formato de Excel | Reporte PDF adaptado al modo claro u oscuro |
 
-> 💡 **Por qué la migré:** el Excel me servía a mí y a mi equipo cercano, pero un archivo es difícil de compartir y de mantener. En formato web, cualquier persona de soporte puede usarla al instante para superarse en sus métricas.
+> 💡 **Por qué la migré:** el Excel me servía a mí y a mi equipo cercano, pero un archivo es difícil de compartir y de mantener. En formato web, cualquier persona de soporte puede usarla al instante para superarse en sus métricas y conservar un registro de sus resultados.
 
 📥 También dejé disponible la versión original en Excel: [`Calculadora_de_Metricas_corregida.xlsx`](./Calculadora_de_Metricas_corregida.xlsx)
 
@@ -65,6 +67,16 @@ Se ingresan las valoraciones **negativas** y **positivas** y el **objetivo** de 
 
 ---
 
+## 📄 Exportación y seguimiento
+
+La calculadora permite **exportar los resultados obtenidos en formato PDF**, facilitando el seguimiento de las métricas de Customer Experience y la conservación de un registro de cada cálculo.
+
+El reporte permite llevar un control de los principales datos de la medición y **se adapta visualmente al modo claro u oscuro** utilizado en la herramienta, manteniendo una presentación consistente y legible.
+
+Esta funcionalidad transforma la calculadora en algo más que una herramienta de cálculo: permite **consultar, alcanzar y registrar objetivos de CSAT**.
+
+---
+
 ### 📚 Objetivos del proyecto
 
 Durante este desarrollo se aplicaron y consolidaron conceptos como:
@@ -72,6 +84,8 @@ Durante este desarrollo se aplicaron y consolidaron conceptos como:
 * **Lógica interactiva con JavaScript (ES6+):** manipulación dinámica del DOM, captura de eventos y cálculo en tiempo real.
 * **Modelado de reglas de negocio:** traducción de una métrica de soporte (CSAT) a fórmulas que indican un objetivo concreto y alcanzable, incluyendo casos límite como objetivos con decimales o del 100%.
 * **Migración de una herramienta de Excel a la web:** llevar la lógica de fórmulas (suma, porcentaje, redondeo y condicionales) a JavaScript manteniendo los mismos resultados.
+* **Generación de reportes en PDF:** incorporación de una opción para exportar los resultados de la calculadora y conservar un registro de las métricas obtenidas.
+* **Adaptación visual del reporte:** generación del PDF respetando el modo claro u oscuro utilizado en la herramienta.
 * **HTML5 semántico:** estructuración accesible y limpia de formularios, inputs numéricos y etiquetas.
 * **CSS3 moderno y diseño responsive:** maquetación adaptable mediante Grid, Flexbox y Media Queries, con soporte automático para modo claro y oscuro.
 * **Validación de entradas de usuario:** prevención de errores en valores vacíos, negativos, decimales y objetivos fuera de rango.
@@ -87,6 +101,8 @@ Durante este desarrollo se aplicaron y consolidaron conceptos como:
 - Botones de **objetivos frecuentes**: 90%, 92%, 94%, 95%, 96%, 98% y 100%.
 - Cálculo de las **positivas necesarias** y de cuántas **faltan sumar** para llegar a la meta.
 - Mensaje claro según el resultado (objetivo alcanzado o cuántas valoraciones faltan).
+- 📄 **Exportación de métricas en PDF** para guardar y llevar un registro de los resultados obtenidos.
+- 🌓 El reporte PDF se adapta automáticamente al **modo claro u oscuro** seleccionado en la herramienta.
 - Interfaz intuitiva, responsive y con **modo oscuro automático**.
 - Sin instalación, sin registro y sin enviar datos a ningún servidor: todo se calcula en el navegador.
 
