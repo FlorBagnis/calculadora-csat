@@ -4,222 +4,1300 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-
-  
 <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='0.5' width='26' height='31' rx='4' fill='%231e3a8a'/%3E%3Crect x='6.5' y='4' width='19' height='7.5' rx='1.5' fill='%23bbf7d0'/%3E%3Cg fill='%23ffffff'%3E%3Crect x='6.5' y='14.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='13.25' y='14.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='20' y='14.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='6.5' y='20.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='13.25' y='20.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='20' y='20.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='6.5' y='26.5' width='5.5' height='3' rx='1'/%3E%3Crect x='13.25' y='26.5' width='5.5' height='3' rx='1'/%3E%3C/g%3E%3Crect x='20' y='26.5' width='5.5' height='3' rx='1' fill='%23fbbf24'/%3E%3C/svg%3E"
-    >
+  rel="icon"
+  type="image/svg+xml"
+  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='0.5' width='26' height='31' rx='4' fill='%231e3a8a'/%3E%3Crect x='6.5' y='4' width='19' height='7.5' rx='1.5' fill='%23bbf7d0'/%3E%3Cg fill='%23ffffff'%3E%3Crect x='6.5' y='14.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='13.25' y='14.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='20' y='14.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='6.5' y='20.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='13.25' y='20.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='20' y='20.5' width='5.5' height='4.5' rx='1'/%3E%3Crect x='6.5' y='26.5' width='5.5' height='3' rx='1'/%3E%3Crect x='13.25' y='26.5' width='5.5' height='3' rx='1'/%3E%3C/g%3E%3Crect x='20' y='26.5' width='5.5' height='3' rx='1' fill='%23fbbf24'/%3E%3C/svg%3E"
+>
 
-  
-  <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
+<title>Calculadora de métricas CSAT · Florencia Bagnis</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
-:root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}}
-:root[data-theme="light"]{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c}
-:root[data-theme="dark"]{--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45}
-main{display:flex;justify-content:center;align-items:flex-start;padding:16px 10px}
-.pdf-container{width:100%;max-width:560px;background:var(--bg);box-sizing:border-box;padding:14px}
-.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.actions-row{display:flex;gap:8px;align-items:center}
-.btn-action{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.btn-action:hover{border-color:var(--accent)}
-.tag{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
-h1{font-size:22px;margin:6px 0}
-p.sub{color:var(--mute);margin:0 0 20px;font-size:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
-.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-label{display:block;font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px}
-input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
-.presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;font-size:12px;color:var(--mute)}
-.presets button{font:inherit;font-weight:700;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);cursor:pointer}
-.presets button.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.res{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.k{border:1px solid var(--line);border-radius:10px;padding:12px}
-.k b{display:block;font-size:26px}
-.k span{font-size:12px;color:var(--mute)}
-.big{grid-column:1/-1;border-left:4px solid var(--accent)}
-.msg{margin-top:16px;padding:12px 14px;border-radius:10px;font-weight:700;font-size:14px}
-.msg.ok{background:rgba(31,157,99,.14);color:var(--ok)}
-.msg.no{background:rgba(194,65,12,.14);color:var(--warn)}
-.note{font-size:12px;color:var(--mute);margin-top:18px;display:flex;flex-direction:column;gap:4px}
-.signature{font-weight:700;color:var(--accent)}
-@media (max-width:480px){.row{grid-template-columns:1fr}h1{font-size:20px}}
-.pdf-wrap{position:absolute;top:0;left:0;z-index:-1;pointer-events:none}
-.pdf-page{width:794px;height:1122px;box-sizing:border-box;position:relative;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;padding:64px 48px}
-.pdf-page h1{font-size:30px;font-weight:800;margin:0 0 8px;text-transform:uppercase;letter-spacing:.01em}
-.pdf-page .psub{font-size:14px;color:var(--mute);margin:0}
-.pdf-kpis{display:flex;gap:14px;margin-top:48px}
-.pdf-kpi{flex:1;box-sizing:border-box;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:18px 16px;min-height:96px}
-.pdf-kpi .l{font-size:10.5px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
-.pdf-kpi .v{font-size:22px;font-weight:800}
-.pdf-table{width:100%;border-collapse:collapse;margin-top:40px;font-size:13px}
-.pdf-table th{background:var(--accent);color:#fff;text-align:left;padding:14px 16px;font-size:11.5px;letter-spacing:.04em}
-.pdf-table td{padding:15px 16px;border-bottom:1px solid var(--line);color:var(--ink)}
-.pdf-table td.m{color:var(--mute)}
-.pdf-table th:last-child,.pdf-table td:last-child{text-align:right;font-weight:700}
-.pdf-h2{font-size:17px;font-weight:800;text-transform:uppercase;margin:44px 0 16px}
-.pdf-box{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--card);border-radius:16px;padding:24px 26px}
-.pdf-box .t{font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
-.pdf-box p{margin:0;font-size:13.5px;line-height:1.6}
-.pdf-foot{position:absolute;left:48px;bottom:38px;font-size:12px;color:var(--mute)}
+:root{
+  --bg:#fff0f5;
+  --card:#ffffff;
+  --ink:#2d1b24;
+  --mute:#8c6b7d;
+  --line:#f3d1df;
+  --accent:#d6457a;
+  --ok:#1f9d63;
+  --warn:#c2410c;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)
+}
+
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1420;
+    --card:#171e2e;
+    --ink:#eef1f7;
+    --mute:#9aa3b5;
+    --line:#2a3347;
+    --accent:#f06a9b;
+    --ok:#3ecf8e;
+    --warn:#fb923c
+  }
+}
+
+:root[data-theme="light"]{
+  --bg:#fff0f5;
+  --card:#ffffff;
+  --ink:#2d1b24;
+  --mute:#8c6b7d;
+  --line:#f3d1df;
+  --accent:#d6457a;
+  --ok:#1f9d63;
+  --warn:#c2410c
+}
+
+:root[data-theme="dark"]{
+  --bg:#0f1420;
+  --card:#171e2e;
+  --ink:#eef1f7;
+  --mute:#9aa3b5;
+  --line:#2a3347;
+  --accent:#f06a9b;
+  --ok:#3ecf8e;
+  --warn:#fb923c
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Helvetica,Arial,sans-serif;
+  line-height:1.45
+}
+
+main{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:16px 10px
+}
+
+.pdf-container{
+  width:100%;
+  max-width:560px;
+  background:var(--bg);
+  box-sizing:border-box;
+  padding:14px
+}
+
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  flex-wrap:wrap
+}
+
+.actions-row{
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+
+.btn-action{
+  background:var(--card);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-shrink:0
+}
+
+.btn-action:hover{
+  border-color:var(--accent)
+}
+
+.tag{
+  color:var(--accent);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.06em
+}
+
+h1{
+  font-size:22px;
+  margin:6px 0
+}
+
+p.sub{
+  color:var(--mute);
+  margin:0 0 20px;
+  font-size:14px
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:var(--mute);
+  margin-bottom:6px
+}
+
+input{
+  width:100%;
+  box-sizing:border-box;
+  font-size:18px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--bg);
+  color:var(--ink)
+}
+
+.presets{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
+  margin-top:12px;
+  font-size:12px;
+  color:var(--mute)
+}
+
+.presets button{
+  font:inherit;
+  font-weight:700;
+  padding:5px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--bg);
+  color:var(--ink);
+  cursor:pointer
+}
+
+.presets button.on{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff
+}
+
+.res{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:16px
+}
+
+.k{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px
+}
+
+.k b{
+  display:block;
+  font-size:26px
+}
+
+.k span{
+  font-size:12px;
+  color:var(--mute)
+}
+
+.big{
+  grid-column:1/-1;
+  border-left:4px solid var(--accent)
+}
+
+.msg{
+  margin-top:16px;
+  padding:12px 14px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px
+}
+
+.msg.ok{
+  background:rgba(31,157,99,.14);
+  color:var(--ok)
+}
+
+.msg.no{
+  background:rgba(194,65,12,.14);
+  color:var(--warn)
+}
+
+.note{
+  font-size:12px;
+  color:var(--mute);
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:4px
+}
+
+.signature{
+  font-weight:700;
+  color:var(--accent)
+}
+
+@media (max-width:480px){
+  .row{
+    grid-template-columns:1fr
+  }
+
+  h1{
+    font-size:20px
+  }
+}
+
+
+/* =========================================================
+   PDF
+   A4 REAL: 210mm x 297mm
+   ========================================================= */
+
+.pdf-wrap{
+  position:fixed;
+  left:-100000px;
+  top:0;
+  width:210mm;
+  height:297mm;
+  overflow:visible;
+  pointer-events:none;
+  z-index:-9999
+}
+
+.pdf-page{
+  width:210mm;
+  height:297mm;
+  min-width:210mm;
+  min-height:297mm;
+  max-width:210mm;
+  max-height:297mm;
+  box-sizing:border-box;
+  position:relative;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Helvetica,Arial,sans-serif;
+  padding:17mm 13mm;
+  margin:0
+}
+
+.pdf-page h1{
+  font-size:30px;
+  font-weight:800;
+  margin:0 0 8px;
+  text-transform:uppercase;
+  letter-spacing:.01em
+}
+
+.pdf-page .psub{
+  font-size:14px;
+  color:var(--mute);
+  margin:0
+}
+
+.pdf-kpis{
+  display:flex;
+  gap:14px;
+  margin-top:48px;
+  width:100%
+}
+
+.pdf-kpi{
+  flex:1 1 0;
+  min-width:0;
+  box-sizing:border-box;
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:16px;
+  padding:18px 16px;
+  min-height:96px
+}
+
+.pdf-kpi .l{
+  font-size:10.5px;
+  font-weight:800;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:14px
+}
+
+.pdf-kpi .v{
+  font-size:22px;
+  font-weight:800;
+  white-space:nowrap
+}
+
+.pdf-table{
+  width:100%;
+  max-width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  margin-top:40px;
+  font-size:13px
+}
+
+.pdf-table th{
+  background:var(--accent);
+  color:#fff;
+  text-align:left;
+  padding:14px 16px;
+  font-size:11.5px;
+  letter-spacing:.04em;
+  overflow-wrap:anywhere
+}
+
+.pdf-table td{
+  padding:15px 16px;
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+  overflow-wrap:anywhere;
+  word-break:normal
+}
+
+.pdf-table td.m{
+  color:var(--mute)
+}
+
+.pdf-table th:last-child,
+.pdf-table td:last-child{
+  text-align:right;
+  font-weight:700
+}
+
+.pdf-h2{
+  font-size:17px;
+  font-weight:800;
+  text-transform:uppercase;
+  margin:44px 0 16px
+}
+
+.pdf-box{
+  border:1px solid var(--line);
+  border-left:4px solid var(--accent);
+  background:var(--card);
+  border-radius:16px;
+  padding:24px 26px;
+  box-sizing:border-box;
+  width:100%
+}
+
+.pdf-box .t{
+  font-size:11px;
+  font-weight:800;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:12px
+}
+
+.pdf-box p{
+  margin:0;
+  font-size:13.5px;
+  line-height:1.6
+}
+
+.pdf-foot{
+  position:absolute;
+  left:13mm;
+  bottom:10mm;
+  font-size:12px;
+  color:var(--mute)
+}
+
+
+/* =========================================================
+   AJUSTES PARA PANTALLAS PEQUEÑAS
+   ========================================================= */
+
+@media (max-width:600px){
+
+  .pdf-kpis{
+    gap:8px
+  }
+
+  .pdf-kpi{
+    padding:14px 12px
+  }
+
+  .pdf-kpi .l{
+    font-size:9px
+  }
+
+  .pdf-kpi .v{
+    font-size:19px
+  }
+}
 </style>
 </head>
+
 <body>
+
 <main>
+
   <div id="pdfArea" class="pdf-container">
+
     <div class="header-row">
+
       <div>
+
         <div class="tag">HERRAMIENTA DE SOPORTE</div>
+
         <h1>Calculadora de métricas CSAT</h1>
+
       </div>
+
       <div class="actions-row" data-html2canvas-ignore="true">
-        <button type="button" id="pdfBtn" class="btn-action" aria-label="Exportar a PDF">📥 PDF</button>
-        <button type="button" id="themeBtn" class="btn-action" aria-label="Cambiar tema">🌸 Modo Claro</button>
+
+        <button
+          type="button"
+          id="pdfBtn"
+          class="btn-action"
+          aria-label="Exportar a PDF"
+        >
+          📥 PDF
+        </button>
+
+        <button
+          type="button"
+          id="themeBtn"
+          class="btn-action"
+          aria-label="Cambiar tema"
+        >
+          🌸 Modo Claro
+        </button>
+
       </div>
+
     </div>
-    <p class="sub">Cargá las valoraciones negativas y positivas: calcula tu porcentaje actual y cuántas positivas te faltan para llegar al objetivo.</p>
+
+
+    <p class="sub">
+      Cargá las valoraciones negativas y positivas: calcula tu porcentaje actual
+      y cuántas positivas te faltan para llegar al objetivo.
+    </p>
+
+
     <div class="card">
+
       <div class="row">
-        <div><label for="neg">Negativas</label><input id="neg" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
-        <div><label for="pos">Positivas</label><input id="pos" type="number" min="0" step="1" value="25" inputmode="numeric"></div>
-        <div><label for="obj">Objetivo (%)</label><input id="obj" type="number" min="1" max="100" step="0.1" value="98" inputmode="decimal"></div>
+
+        <div>
+          <label for="neg">Negativas</label>
+
+          <input
+            id="neg"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+            inputmode="numeric"
+          >
+        </div>
+
+
+        <div>
+          <label for="pos">Positivas</label>
+
+          <input
+            id="pos"
+            type="number"
+            min="0"
+            step="1"
+            value="25"
+            inputmode="numeric"
+          >
+        </div>
+
+
+        <div>
+          <label for="obj">Objetivo (%)</label>
+
+          <input
+            id="obj"
+            type="number"
+            min="1"
+            max="100"
+            step="0.1"
+            value="98"
+            inputmode="decimal"
+          >
+        </div>
+
       </div>
-      <div class="presets" aria-label="Objetivos frecuentes">
+
+
+      <div
+        class="presets"
+        aria-label="Objetivos frecuentes"
+      >
+
         <span>Objetivos frecuentes:</span>
-        <button type="button" data-o="90">90%</button><button type="button" data-o="92">92%</button><button type="button" data-o="94">94%</button><button type="button" data-o="95">95%</button><button type="button" data-o="96">96%</button><button type="button" data-o="98">98%</button><button type="button" data-o="100">100%</button>
+
+        <button type="button" data-o="90">90%</button>
+        <button type="button" data-o="92">92%</button>
+        <button type="button" data-o="94">94%</button>
+        <button type="button" data-o="95">95%</button>
+        <button type="button" data-o="96">96%</button>
+        <button type="button" data-o="98">98%</button>
+        <button type="button" data-o="100">100%</button>
+
       </div>
+
+
       <div class="res">
-        <div class="k big"><b id="pct">–</b><span>% actual de CSAT</span></div>
-        <div class="k"><b id="tot">–</b><span>Total de valoraciones</span></div>
-        <div class="k"><b id="need">–</b><span>Positivas necesarias en total</span></div>
-        <div class="k big"><b id="miss">–</b><span>Positivas extra que te faltan sumar</span></div>
+
+        <div class="k big">
+          <b id="pct">–</b>
+          <span>% actual de CSAT</span>
+        </div>
+
+        <div class="k">
+          <b id="tot">–</b>
+          <span>Total de valoraciones</span>
+        </div>
+
+        <div class="k">
+          <b id="need">–</b>
+          <span>Positivas necesarias en total</span>
+        </div>
+
+        <div class="k big">
+          <b id="miss">–</b>
+          <span>Positivas extra que te faltan sumar</span>
+        </div>
+
       </div>
-      <div id="msg" class="msg ok"></div>
+
+
+      <div
+        id="msg"
+        class="msg ok"
+      ></div>
+
     </div>
+
+
     <div class="note">
-      <span>Versión web de la calculadora de Excel que armé para seguir mi CSAT y que compartí con mis compañeros para entender las métricas.</span>
-      <span class="signature">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
+
+      <span>
+        Versión web de la calculadora de Excel que armé para seguir mi CSAT
+        y que compartí con mis compañeros para entender las métricas.
+      </span>
+
+      <span class="signature">
+        Diseñado para entender y mejorar métricas By Flor Bagnis ❤️
+      </span>
+
     </div>
+
   </div>
+
 </main>
+
+
 <script>
 (function(){
-  var $=function(i){return document.getElementById(i)};
-  var htmlEl=document.documentElement, themeBtn=$('themeBtn');
 
-  try{ var saved=localStorage.getItem('csat_theme'); if(saved) htmlEl.setAttribute('data-theme',saved); }catch(e){}
+  var $ = function(i){
+    return document.getElementById(i);
+  };
+
+  var htmlEl = document.documentElement;
+  var themeBtn = $('themeBtn');
+
+
+  /* =========================================================
+     TEMA
+     ========================================================= */
+
+  try{
+
+    var saved = localStorage.getItem('csat_theme');
+
+    if(saved){
+      htmlEl.setAttribute('data-theme', saved);
+    }
+
+  }catch(e){}
+
 
   function updateThemeButton(){
-    themeBtn.textContent = htmlEl.getAttribute('data-theme')==='light' ? '🌙 Modo Oscuro' : '🌸 Modo Claro';
+
+    themeBtn.textContent =
+      htmlEl.getAttribute('data-theme') === 'light'
+        ? '🌙 Modo Oscuro'
+        : '🌸 Modo Claro';
+
   }
+
   updateThemeButton();
 
+
   themeBtn.addEventListener('click',function(){
-    var next = htmlEl.getAttribute('data-theme')==='light' ? 'dark' : 'light';
+
+    var next =
+      htmlEl.getAttribute('data-theme') === 'light'
+        ? 'dark'
+        : 'light';
+
     htmlEl.setAttribute('data-theme',next);
-    try{ localStorage.setItem('csat_theme',next); }catch(e){}
+
+    try{
+      localStorage.setItem('csat_theme',next);
+    }catch(e){}
+
     updateThemeButton();
+
   });
 
-  // PDF estilo "Mensuales": hoja A4 vertical con tarjetas y tabla, en los colores del tema activo.
-  function generateCsatPDF(){
-    var n=Math.max(0,Math.floor(+$('neg').value||0)),
-        p=Math.max(0,Math.floor(+$('pos').value||0)),
-        raw=parseFloat(String($('obj').value).replace(',','.')),
-        op=Math.min(100,Math.max(1,isNaN(raw)?94:raw)),
-        label=String(op).replace('.',',')+'%',
-        pct=$('pct').textContent, tot=$('tot').textContent,
-        need=$('need').textContent, miss=$('miss').textContent,
-        msg=$('msg').textContent;
-    var fecha=new Date().toLocaleDateString('es-AR',{month:'long',year:'numeric'});
-    fecha=fecha.charAt(0).toUpperCase()+fecha.slice(1);
 
-    var html=
-      '<div class="pdf-page">'+
-        '<h1>Calculadora de métricas CSAT</h1>'+
-        '<p class="psub">Reporte - '+fecha+'</p>'+
-        '<div class="pdf-kpis">'+
-          '<div class="pdf-kpi"><div class="l">CSAT actual</div><div class="v">'+pct+'</div></div>'+
-          '<div class="pdf-kpi"><div class="l">Valoraciones</div><div class="v">'+tot+'</div></div>'+
-          '<div class="pdf-kpi"><div class="l">Objetivo</div><div class="v">'+label+'</div></div>'+
-          '<div class="pdf-kpi"><div class="l">Te faltan</div><div class="v">'+miss+'</div></div>'+
-        '</div>'+
-        '<table class="pdf-table"><thead><tr><th>MÉTRICA</th><th>DETALLE</th><th>VALOR</th></tr></thead><tbody>'+
-          '<tr><td>Valoraciones positivas</td><td class="m">Cargadas</td><td>'+p+'</td></tr>'+
-          '<tr><td>Valoraciones negativas</td><td class="m">Cargadas</td><td>'+n+'</td></tr>'+
-          '<tr><td>Total de valoraciones</td><td class="m">Positivas + negativas</td><td>'+tot+'</td></tr>'+
-          '<tr><td>Objetivo de CSAT</td><td class="m">Meta definida</td><td>'+label+'</td></tr>'+
-          '<tr><td>Positivas necesarias</td><td class="m">En total para el objetivo</td><td>'+need+'</td></tr>'+
-          '<tr><td>Positivas extra</td><td class="m">Que faltan sumar</td><td>'+miss+'</td></tr>'+
-        '</tbody></table>'+
-        '<div class="pdf-h2">Resumen del período</div>'+
-        '<div class="pdf-box"><div class="t">Análisis de resultados</div>'+
-          '<p>Con '+tot+' valoraciones registradas ('+p+' positivas y '+n+' negativas), tu CSAT actual es de '+pct+'. '+msg+'</p></div>'+
-        '<div class="pdf-foot">CSAT - Creado por Flor Bagnis</div>'+
+  /* =========================================================
+     GENERACIÓN DEL PDF
+     ========================================================= */
+
+  function generateCsatPDF(){
+
+    var n =
+      Math.max(
+        0,
+        Math.floor(+$('neg').value || 0)
+      );
+
+    var p =
+      Math.max(
+        0,
+        Math.floor(+$('pos').value || 0)
+      );
+
+    var raw =
+      parseFloat(
+        String($('obj').value).replace(',','.')
+      );
+
+    var op =
+      Math.min(
+        100,
+        Math.max(
+          1,
+          isNaN(raw) ? 94 : raw
+        )
+      );
+
+    var label =
+      String(op).replace('.',',') + '%';
+
+    var pct = $('pct').textContent;
+    var tot = $('tot').textContent;
+    var need = $('need').textContent;
+    var miss = $('miss').textContent;
+    var msg = $('msg').textContent;
+
+
+    var fecha =
+      new Date().toLocaleDateString(
+        'es-AR',
+        {
+          month:'long',
+          year:'numeric'
+        }
+      );
+
+    fecha =
+      fecha.charAt(0).toUpperCase() +
+      fecha.slice(1);
+
+
+    /*
+      IMPORTANTE:
+
+      El PDF ahora utiliza A4 real en milímetros.
+      Esto evita que la conversión de píxeles a PDF
+      dependa de la resolución o del navegador.
+    */
+
+    var html =
+
+      '<div class="pdf-page">' +
+
+        '<h1>Calculadora de métricas CSAT</h1>' +
+
+        '<p class="psub">' +
+          'Reporte - ' + fecha +
+        '</p>' +
+
+
+        '<div class="pdf-kpis">' +
+
+          '<div class="pdf-kpi">' +
+            '<div class="l">CSAT actual</div>' +
+            '<div class="v">' + pct + '</div>' +
+          '</div>' +
+
+          '<div class="pdf-kpi">' +
+            '<div class="l">Valoraciones</div>' +
+            '<div class="v">' + tot + '</div>' +
+          '</div>' +
+
+          '<div class="pdf-kpi">' +
+            '<div class="l">Objetivo</div>' +
+            '<div class="v">' + label + '</div>' +
+          '</div>' +
+
+          '<div class="pdf-kpi">' +
+            '<div class="l">Te faltan</div>' +
+            '<div class="v">' + miss + '</div>' +
+          '</div>' +
+
+        '</div>' +
+
+
+        '<table class="pdf-table">' +
+
+          '<colgroup>' +
+            '<col style="width:42%">' +
+            '<col style="width:40%">' +
+            '<col style="width:18%">' +
+          '</colgroup>' +
+
+          '<thead>' +
+
+            '<tr>' +
+              '<th>MÉTRICA</th>' +
+              '<th>DETALLE</th>' +
+              '<th>VALOR</th>' +
+            '</tr>' +
+
+          '</thead>' +
+
+
+          '<tbody>' +
+
+            '<tr>' +
+              '<td>Valoraciones positivas</td>' +
+              '<td class="m">Cargadas</td>' +
+              '<td>' + p + '</td>' +
+            '</tr>' +
+
+            '<tr>' +
+              '<td>Valoraciones negativas</td>' +
+              '<td class="m">Cargadas</td>' +
+              '<td>' + n + '</td>' +
+            '</tr>' +
+
+            '<tr>' +
+              '<td>Total de valoraciones</td>' +
+              '<td class="m">Positivas + negativas</td>' +
+              '<td>' + tot + '</td>' +
+            '</tr>' +
+
+            '<tr>' +
+              '<td>Objetivo de CSAT</td>' +
+              '<td class="m">Meta definida</td>' +
+              '<td>' + label + '</td>' +
+            '</tr>' +
+
+            '<tr>' +
+              '<td>Positivas necesarias</td>' +
+              '<td class="m">En total para el objetivo</td>' +
+              '<td>' + need + '</td>' +
+            '</tr>' +
+
+            '<tr>' +
+              '<td>Positivas extra</td>' +
+              '<td class="m">Que faltan sumar</td>' +
+              '<td>' + miss + '</td>' +
+            '</tr>' +
+
+          '</tbody>' +
+
+        '</table>' +
+
+
+        '<div class="pdf-h2">' +
+          'Resumen del período' +
+        '</div>' +
+
+
+        '<div class="pdf-box">' +
+
+          '<div class="t">' +
+            'Análisis de resultados' +
+          '</div>' +
+
+          '<p>' +
+            'Con ' + tot +
+            ' valoraciones registradas (' +
+            p +
+            ' positivas y ' +
+            n +
+            ' negativas), tu CSAT actual es de ' +
+            pct +
+            '. ' +
+            msg +
+          '</p>' +
+
+        '</div>' +
+
+
+        '<div class="pdf-foot">' +
+          'CSAT - Creado por Flor Bagnis' +
+        '</div>' +
+
       '</div>';
 
-    var wrap=document.createElement('div');
-    wrap.className='pdf-wrap';
-    wrap.innerHTML=html;
-    document.body.appendChild(wrap);
-    window.scrollTo(0,0);
-    var page=wrap.firstChild;
-    var bg=getComputedStyle(page).backgroundColor;
 
-    var opt={
-      margin:0,
-      filename:'Reporte_CSAT_Flor_Bagnis.pdf',
-      image:{type:'jpeg',quality:0.98},
-      html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0,width:794,height:1122,windowWidth:794},
-      jsPDF:{unit:'px',format:[794,1123],orientation:'portrait',hotfixes:['px_scaling']},
-      pagebreak:{mode:[]}
-    };
-    var done=function(){ wrap.remove(); };
-    html2pdf().set(opt).from(page).toPdf().get('pdf').then(function(pdf){
-      // por redondeo puede sobrar una hoja vacía: se elimina
-      while(pdf.internal.getNumberOfPages()>1){ pdf.deletePage(pdf.internal.getNumberOfPages()); }
-    }).save().then(done,done);
+    /*
+      Creamos el documento fuera de la pantalla.
+
+      En lugar de usar:
+      width:794px / height:1122px
+
+      usamos:
+      width:210mm / height:297mm
+
+      que corresponde exactamente a A4.
+    */
+
+    var wrap = document.createElement('div');
+
+    wrap.className = 'pdf-wrap';
+
+    wrap.innerHTML = html;
+
+    document.body.appendChild(wrap);
+
+
+    var page = wrap.firstElementChild;
+
+
+    /*
+      Esperamos un frame para que el navegador
+      termine de calcular fuentes, medidas y layout.
+    */
+
+    requestAnimationFrame(function(){
+
+      var computed =
+        getComputedStyle(page);
+
+      var bg =
+        computed.backgroundColor;
+
+
+      /*
+        Configuración robusta para A4.
+
+        html2canvas trabaja en píxeles internamente,
+        pero jsPDF recibe el resultado en milímetros.
+
+        Esto evita el recorte que podía aparecer
+        en PC por la conversión px -> PDF.
+      */
+
+      var opt = {
+
+        margin: 0,
+
+        filename:
+          'Reporte_CSAT_Flor_Bagnis.pdf',
+
+        image: {
+          type: 'jpeg',
+          quality: 0.98
+        },
+
+        html2canvas: {
+
+          scale: 2,
+
+          useCORS: true,
+
+          allowTaint: false,
+
+          backgroundColor: bg,
+
+          scrollX: 0,
+
+          scrollY: 0,
+
+          /*
+            210mm a 96dpi ≈ 793.7px
+            297mm a 96dpi ≈ 1122.5px
+
+            Estos valores solamente indican
+            el tamaño de renderizado de html2canvas.
+          */
+
+          width: 794,
+
+          height: 1123,
+
+          windowWidth: 794,
+
+          windowHeight: 1123,
+
+          logging: false
+        },
+
+        jsPDF: {
+
+          unit: 'mm',
+
+          format: 'a4',
+
+          orientation: 'portrait',
+
+          compress: true
+        },
+
+        pagebreak: {
+
+          mode: []
+        }
+
+      };
+
+
+      /*
+        Generamos el PDF.
+
+        El elemento ya tiene exactamente el tamaño A4,
+        por lo que html2pdf no necesita intentar
+        acomodarlo dentro de una hoja de otro tamaño.
+      */
+
+      html2pdf()
+
+        .set(opt)
+
+        .from(page)
+
+        .toPdf()
+
+        .get('pdf')
+
+        .then(function(pdf){
+
+          /*
+            Por seguridad, si alguna versión de html2pdf
+            genera una página adicional vacía,
+            la eliminamos.
+          */
+
+          while(
+            pdf.internal.getNumberOfPages() > 1
+          ){
+
+            pdf.deletePage(
+              pdf.internal.getNumberOfPages()
+            );
+
+          }
+
+        })
+
+        .save()
+
+        .then(function(){
+
+          wrap.remove();
+
+        })
+
+        .catch(function(){
+
+          wrap.remove();
+
+        });
+
+    });
+
   }
-  $('pdfBtn').addEventListener('click',generateCsatPDF);
+
+
+  $('pdfBtn')
+    .addEventListener(
+      'click',
+      generateCsatPDF
+    );
+
+
+  /* =========================================================
+     CÁLCULO
+     ========================================================= */
 
   function calc(){
-    var ni=$('neg'), pi=$('pos');
-    if(ni.value.trim()==='') ni.value='0';
-    if(pi.value.trim()==='') pi.value='0';
-    var n=Math.max(0,Math.floor(+ni.value||0)),
-        p=Math.max(0,Math.floor(+pi.value||0)),
-        raw=parseFloat(String($('obj').value).replace(',','.')),
-        op=Math.min(100,Math.max(1,isNaN(raw)?94:raw)),
-        o=op/100, t=n+p,
-        label=String(op).replace('.',',')+'%';
-    var pct=t>0?p/t:0;
-    $('pct').textContent=t>0?(pct*100).toFixed(2).replace('.',',')+'%':'–';
-    $('tot').textContent=t;
-    var m=$('msg'), need, miss;
-    if(t===0){need=0;miss=0;}
-    else if(o>=1){ if(n===0){need=0;miss=0;} else {need=null;miss=null;} }
-    else { need=Math.ceil(n*o/(1-o)-1e-9); miss=Math.max(0,need-p); }
-    $('need').textContent=need===null?'–':need;
-    $('miss').textContent=miss===null?'–':miss;
-    if(t===0){m.className='msg ok';m.textContent='Cargá valoraciones para calcular.';}
-    else if(need===null){m.className='msg no';m.textContent='Para llegar al 100% no puede haber valoraciones negativas. Con las negativas cargadas ya no es alcanzable.';}
-    else if(miss===0){m.className='msg ok';m.textContent='Ya alcanzás el objetivo del '+label+'. No necesitás positivas extra.';}
-    else {m.className='msg no';m.textContent='Te faltan '+miss+' valoraci'+(miss===1?'ón':'ones')+' positiva'+(miss===1?'':'s')+' para llegar al '+label+'.';}
-    var bs=document.querySelectorAll('.presets button');
-    for(var i=0;i<bs.length;i++) bs[i].className=(parseFloat(bs[i].getAttribute('data-o'))===op)?'on':'';
+
+    var ni = $('neg');
+    var pi = $('pos');
+
+
+    if(ni.value.trim() === ''){
+      ni.value = '0';
+    }
+
+
+    if(pi.value.trim() === ''){
+      pi.value = '0';
+    }
+
+
+    var n =
+      Math.max(
+        0,
+        Math.floor(+ni.value || 0)
+      );
+
+    var p =
+      Math.max(
+        0,
+        Math.floor(+pi.value || 0)
+      );
+
+
+    var raw =
+      parseFloat(
+        String($('obj').value)
+          .replace(',','.')
+      );
+
+
+    var op =
+      Math.min(
+        100,
+        Math.max(
+          1,
+          isNaN(raw) ? 94 : raw
+        )
+      );
+
+
+    var o = op / 100;
+    var t = n + p;
+
+
+    var label =
+      String(op).replace('.',',') +
+      '%';
+
+
+    var pct =
+      t > 0
+        ? p / t
+        : 0;
+
+
+    $('pct').textContent =
+      t > 0
+        ? (pct * 100)
+            .toFixed(2)
+            .replace('.',',') +
+          '%'
+        : '–';
+
+
+    $('tot').textContent = t;
+
+
+    var m = $('msg');
+    var need;
+    var miss;
+
+
+    if(t === 0){
+
+      need = 0;
+      miss = 0;
+
+    }
+
+    else if(o >= 1){
+
+      if(n === 0){
+
+        need = 0;
+        miss = 0;
+
+      }
+
+      else{
+
+        need = null;
+        miss = null;
+
+      }
+
+    }
+
+    else{
+
+      need =
+        Math.ceil(
+          n * o / (1 - o) -
+          1e-9
+        );
+
+      miss =
+        Math.max(
+          0,
+          need - p
+        );
+
+    }
+
+
+    $('need').textContent =
+      need === null
+        ? '–'
+        : need;
+
+
+    $('miss').textContent =
+      miss === null
+        ? '–'
+        : miss;
+
+
+    if(t === 0){
+
+      m.className = 'msg ok';
+
+      m.textContent =
+        'Cargá valoraciones para calcular.';
+
+    }
+
+    else if(need === null){
+
+      m.className = 'msg no';
+
+      m.textContent =
+        'Para llegar al 100% no puede haber valoraciones negativas. Con las negativas cargadas ya no es alcanzable.';
+
+    }
+
+    else if(miss === 0){
+
+      m.className = 'msg ok';
+
+      m.textContent =
+        'Ya alcanzás el objetivo del ' +
+        label +
+        '. No necesitás positivas extra.';
+
+    }
+
+    else{
+
+      m.className = 'msg no';
+
+      m.textContent =
+        'Te faltan ' +
+        miss +
+        ' valoraci' +
+        (miss === 1 ? 'ón' : 'ones') +
+        ' positiva' +
+        (miss === 1 ? '' : 's') +
+        ' para llegar al ' +
+        label +
+        '.';
+
+    }
+
+
+    var bs =
+      document.querySelectorAll(
+        '.presets button'
+      );
+
+
+    for(
+      var i = 0;
+      i < bs.length;
+      i++
+    ){
+
+      bs[i].className =
+        (
+          parseFloat(
+            bs[i].getAttribute('data-o')
+          ) === op
+        )
+        ? 'on'
+        : '';
+
+    }
+
   }
 
-  ['neg','pos','obj'].forEach(function(i){$(i).addEventListener('input',calc)});
-  var bs=document.querySelectorAll('.presets button');
-  for(var i=0;i<bs.length;i++){
-    bs[i].addEventListener('click',function(){$('obj').value=this.getAttribute('data-o');calc();});
+
+  ['neg','pos','obj']
+    .forEach(function(i){
+
+      $(i)
+        .addEventListener(
+          'input',
+          calc
+        );
+
+    });
+
+
+  var bs =
+    document.querySelectorAll(
+      '.presets button'
+    );
+
+
+  for(
+    var i = 0;
+    i < bs.length;
+    i++
+  ){
+
+    bs[i]
+      .addEventListener(
+        'click',
+        function(){
+
+          $('obj').value =
+            this.getAttribute('data-o');
+
+          calc();
+
+        }
+      );
+
   }
+
+
   calc();
+
 })();
 </script>
+
 </body>
 </html>
