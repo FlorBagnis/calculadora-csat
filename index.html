@@ -135,7 +135,7 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
     $('need').textContent = need === null ? '–' : need;
     $('miss').textContent = miss === null ? '–' : miss;
     
-    if (t === 0) {
+        if (t === 0) {
       m.className = 'msg ok';
       m.textContent = 'Cargá valoraciones para calcular.';
     } else if (need === null) {
@@ -146,8 +146,9 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
       m.textContent = 'Ya alcanzás el objetivo del ' + label + '. No necesitás positivas extra.';
     } else {
       m.className = 'msg no';
-      m.textContent = 'Te faltan ' + miss + ' valoración' + (miss === 1 ? '' : 'es') + ' positiva' + (miss === 1 ? '' : 's') + ' para llegar al ' + label + '.';
+      m.textContent = 'Te faltan ' + miss + ' valoraci' + (miss === 1 ? 'ón' : 'ones') + ' positiva' + (miss === 1 ? '' : 's') + ' para llegar al ' + label + '.';
     }
+
     
     var bs = document.querySelectorAll('.presets button');
     for (var i = 0; i < bs.length; i++) {
