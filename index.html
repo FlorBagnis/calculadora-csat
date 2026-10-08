@@ -4,189 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
-<!-- Librería html2pdf -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-:root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}}
 :root[data-theme="light"]{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c}
 :root[data-theme="dark"]{--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: Helvetica, Arial, sans-serif;
-  line-height: 1.45;
-}
-main {
-  width: 100%;
-  min-height: 100vh;
-  background: var(--bg);
-  padding: 30px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-.pdf-container {
-  width: 100%;
-  max-width: 560px;
-  background: var(--bg);
-  box-sizing: border-box;
-}
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.actions-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.btn-action {
-  background: var(--card);
-  border: 1px solid var(--line);
-  color: var(--ink);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-.btn-action:hover {
-  border-color: var(--accent);
-}
-.tag {
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: .06em;
-}
-h1 {
-  font-size: 24px;
-  margin: 6px 0 6px;
-}
-p.sub {
-  color: var(--mute);
-  margin: 0 0 20px;
-  font-size: 14px;
-}
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 18px;
-}
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-}
-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--mute);
-  margin-bottom: 6px;
-}
-input {
-  width: 100%;
-  font-size: 18px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--ink);
-}
-.presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-  margin-top: 12px;
-  font-size: 12px;
-  color: var(--mute);
-}
-.presets button {
-  font: inherit;
-  font-weight: 700;
-  padding: 5px 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--bg);
-  color: var(--ink);
-  cursor: pointer;
-}
-.presets button.on {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-.res {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 16px;
-}
-.k {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px;
-}
-.k b {
-  display: block;
-  font-size: 26px;
-}
-.k span {
-  font-size: 12px;
-  color: var(--mute);
-}
-.big {
-  grid-column: 1/-1;
-  border-left: 4px solid var(--accent);
-}
-.msg {
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 14px;
-}
-.msg.ok {
-  background: rgba(31,157,99,.14);
-  color: var(--ok);
-}
-.msg.no {
-  background: rgba(194,65,12,.14);
-  color: var(--warn);
-}
-.note {
-  font-size: 12px;
-  color: var(--mute);
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.signature {
-  font-weight: 700;
-  color: var(--accent);
-}
-
-@media (max-width: 480px) {
-  .row { grid-template-columns: 1fr; }
-  h1 { font-size: 21px; }
-  main { padding: 16px 10px; }
-}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45}
+main{display:flex;justify-content:center;align-items:flex-start;padding:16px 10px}
+.pdf-container{width:100%;max-width:560px;background:var(--bg);box-sizing:border-box;padding:14px}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.actions-row{display:flex;gap:8px;align-items:center}
+.btn-action{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.btn-action:hover{border-color:var(--accent)}
+.tag{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
+h1{font-size:22px;margin:6px 0}
+p.sub{color:var(--mute);margin:0 0 20px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+label{display:block;font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px}
+input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;font-size:12px;color:var(--mute)}
+.presets button{font:inherit;font-weight:700;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);cursor:pointer}
+.presets button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.k{border:1px solid var(--line);border-radius:10px;padding:12px}
+.k b{display:block;font-size:26px}
+.k span{font-size:12px;color:var(--mute)}
+.big{grid-column:1/-1;border-left:4px solid var(--accent)}
+.msg{margin-top:16px;padding:12px 14px;border-radius:10px;font-weight:700;font-size:14px}
+.msg.ok{background:rgba(31,157,99,.14);color:var(--ok)}
+.msg.no{background:rgba(194,65,12,.14);color:var(--warn)}
+.note{font-size:12px;color:var(--mute);margin-top:18px;display:flex;flex-direction:column;gap:4px}
+.signature{font-weight:700;color:var(--accent)}
+@media (max-width:480px){.row{grid-template-columns:1fr}h1{font-size:20px}}
 </style>
 </head>
 <body>
@@ -197,7 +48,7 @@ input {
         <div class="tag">HERRAMIENTA DE SOPORTE</div>
         <h1>Calculadora de métricas CSAT</h1>
       </div>
-      <div class="actions-row">
+      <div class="actions-row" data-html2canvas-ignore="true">
         <button type="button" id="pdfBtn" class="btn-action" aria-label="Exportar a PDF">📥 PDF</button>
         <button type="button" id="themeBtn" class="btn-action" aria-label="Cambiar tema">🌸 Modo Claro</button>
       </div>
@@ -230,125 +81,74 @@ input {
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
-  
-  var htmlEl = document.documentElement;
-  var themeBtn = $('themeBtn');
-  var savedTheme = localStorage.getItem('csat_theme');
-  
-  if(savedTheme){
-    htmlEl.setAttribute('data-theme', savedTheme);
-  }
-  
+  var htmlEl=document.documentElement, themeBtn=$('themeBtn');
+
+  try{ var saved=localStorage.getItem('csat_theme'); if(saved) htmlEl.setAttribute('data-theme',saved); }catch(e){}
+
   function updateThemeButton(){
-    var current = htmlEl.getAttribute('data-theme');
-    if(current === 'light'){
-      themeBtn.textContent = '🌙 Modo Oscuro';
-    } else {
-      themeBtn.textContent = '🌸 Modo Claro';
-    }
+    themeBtn.textContent = htmlEl.getAttribute('data-theme')==='light' ? '🌙 Modo Oscuro' : '🌸 Modo Claro';
   }
   updateThemeButton();
 
-  themeBtn.addEventListener('click', function(){
-    var current = htmlEl.getAttribute('data-theme');
-    var next = (current === 'light') ? 'dark' : 'light';
-    htmlEl.setAttribute('data-theme', next);
-    localStorage.setItem('csat_theme', next);
+  themeBtn.addEventListener('click',function(){
+    var next = htmlEl.getAttribute('data-theme')==='light' ? 'dark' : 'light';
+    htmlEl.setAttribute('data-theme',next);
+    try{ localStorage.setItem('csat_theme',next); }catch(e){}
     updateThemeButton();
   });
 
-  // Función dedicada para exportar PDF idéntica en estructura a Mensuales
-  function generateCsatPDF() {
-    var element = $('pdfArea');
-    var actionsRow = document.querySelector('.actions-row');
-    actionsRow.style.display = 'none';
+  // Exporta el PDF con el tamaño exacto del contenido: sin hojas A4, sin márgenes, sin blancos.
+  // .save() descarga directo, no abre el diálogo de impresión.
+  function generateCsatPDF(){
+    var el=$('pdfArea');
+    var bg=getComputedStyle(el).backgroundColor;
+    window.scrollTo(0,0);
+    var w=Math.ceil(el.offsetWidth), h=Math.ceil(el.offsetHeight);
 
-    var currentBg = getComputedStyle(htmlEl).getPropertyValue('--bg').trim();
-    document.body.style.backgroundColor = currentBg;
-    element.style.backgroundColor = currentBg;
-
-    var opt = {
-      margin:       0,
-      filename:     'Reporte_CSAT_Flor_Bagnis.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, backgroundColor: currentBg, windowWidth: element.scrollWidth },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    var opt={
+      margin:0,
+      filename:'Reporte_CSAT_Flor_Bagnis.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0,width:w,height:h,windowWidth:w},
+      jsPDF:{unit:'px',format:[w,h],orientation:'portrait',hotfixes:['px_scaling']},
+      pagebreak:{mode:[]}
     };
-
-    html2pdf().from(element).set(opt).save().then(function(){
-      actionsRow.style.display = 'flex';
-    }).catch(function(){
-      actionsRow.style.display = 'flex';
-    });
+    html2pdf().set(opt).from(el).save();
   }
-
-  $("pdfBtn")?.addEventListener("click", generateCsatPDF);
+  $('pdfBtn').addEventListener('click',generateCsatPDF);
 
   function calc(){
-    var negInput = $('neg');
-    var posInput = $('pos');
-
-    if(negInput.value.trim() === '') { negInput.value = '0'; }
-    if(posInput.value.trim() === '') { posInput.value = '0'; }
-
-    var n = Math.max(0, Math.floor(+negInput.value || 0)),
-        p = Math.max(0, Math.floor(+posInput.value || 0)),
-        raw = parseFloat(String($('obj').value).replace(',','.')),
-        op = Math.min(100, Math.max(1, isNaN(raw) ? 94 : raw)),
-        o = op / 100, 
-        t = n + p,
-        label = String(op).replace('.',',') + '%';
-        
-    var pct = t > 0 ? p / t : 0;
-    
-    $('pct').textContent = t > 0 ? (pct * 100).toFixed(2).replace('.',',') + '%' : '–';
-    $('tot').textContent = t;
-    
-    var m = $('msg'), need, miss;
-    
-    if (t === 0) {
-      need = 0;
-      miss = 0;
-    } else if (o >= 1) {
-      if (n === 0) { need = 0; miss = 0; } else { need = null; miss = null; }
-    } else {
-      need = Math.ceil(n * o / (1 - o) - 1e-9);
-      miss = Math.max(0, need - p);
-    }
-    
-    $('need').textContent = need === null ? '–' : need;
-    $('miss').textContent = miss === null ? '–' : miss;
-    
-    if (t === 0) {
-      m.className = 'msg ok';
-      m.textContent = 'Cargá valoraciones para calcular.';
-    } else if (need === null) {
-      m.className = 'msg no';
-      m.textContent = 'Para llegar al 100% no puede haber valoraciones negativas. Con las negativas cargadas ya no es alcanzable.';
-    } else if (miss === 0) {
-      m.className = 'msg ok';
-      m.textContent = 'Ya alcanzás el objetivo del ' + label + '. No necesitás positivas extra.';
-    } else {
-      m.className = 'msg no';
-      m.textContent = 'Te faltan ' + miss + ' valoraci' + (miss === 1 ? 'ón' : 'ones') + ' positiva' + (miss === 1 ? '' : 's') + ' para llegar al ' + label + '.';
-    }
-    
-    var bs = document.querySelectorAll('.presets button');
-    for (var i = 0; i < bs.length; i++) {
-      bs[i].className = (parseFloat(bs[i].getAttribute('data-o')) === op) ? 'on' : '';
-    }
+    var ni=$('neg'), pi=$('pos');
+    if(ni.value.trim()==='') ni.value='0';
+    if(pi.value.trim()==='') pi.value='0';
+    var n=Math.max(0,Math.floor(+ni.value||0)),
+        p=Math.max(0,Math.floor(+pi.value||0)),
+        raw=parseFloat(String($('obj').value).replace(',','.')),
+        op=Math.min(100,Math.max(1,isNaN(raw)?94:raw)),
+        o=op/100, t=n+p,
+        label=String(op).replace('.',',')+'%';
+    var pct=t>0?p/t:0;
+    $('pct').textContent=t>0?(pct*100).toFixed(2).replace('.',',')+'%':'–';
+    $('tot').textContent=t;
+    var m=$('msg'), need, miss;
+    if(t===0){need=0;miss=0;}
+    else if(o>=1){ if(n===0){need=0;miss=0;} else {need=null;miss=null;} }
+    else { need=Math.ceil(n*o/(1-o)-1e-9); miss=Math.max(0,need-p); }
+    $('need').textContent=need===null?'–':need;
+    $('miss').textContent=miss===null?'–':miss;
+    if(t===0){m.className='msg ok';m.textContent='Cargá valoraciones para calcular.';}
+    else if(need===null){m.className='msg no';m.textContent='Para llegar al 100% no puede haber valoraciones negativas. Con las negativas cargadas ya no es alcanzable.';}
+    else if(miss===0){m.className='msg ok';m.textContent='Ya alcanzás el objetivo del '+label+'. No necesitás positivas extra.';}
+    else {m.className='msg no';m.textContent='Te faltan '+miss+' valoraci'+(miss===1?'ón':'ones')+' positiva'+(miss===1?'':'s')+' para llegar al '+label+'.';}
+    var bs=document.querySelectorAll('.presets button');
+    for(var i=0;i<bs.length;i++) bs[i].className=(parseFloat(bs[i].getAttribute('data-o'))===op)?'on':'';
   }
 
-  ['neg','pos','obj'].forEach(function(i){ $(i).addEventListener('input', calc) });
-  
-  var bs = document.querySelectorAll('.presets button');
-  for (var i = 0; i < bs.length; i++) {
-    bs[i].addEventListener('click', function(){
-      $('obj').value = this.getAttribute('data-o');
-      calc();
-    });
+  ['neg','pos','obj'].forEach(function(i){$(i).addEventListener('input',calc)});
+  var bs=document.querySelectorAll('.presets button');
+  for(var i=0;i<bs.length;i++){
+    bs[i].addEventListener('click',function(){$('obj').value=this.getAttribute('data-o');calc();});
   }
-  
   calc();
 })();
 </script>
