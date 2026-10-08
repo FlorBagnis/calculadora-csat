@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
-<!-- Librería jsPDF para descarga directa -->
+<!-- Librería jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
@@ -15,9 +15,9 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45}
-main{max-width:560px;margin:0 auto;padding:28px 18px 40px}
-.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.actions-row{display:flex;gap:8px;align-items:center}
+main{max-width:560px;width:100%;margin:0 auto;padding:28px 16px 40px}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.actions-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .btn-action{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
 .btn-action:hover{border-color:var(--accent)}
 .tag{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
@@ -39,8 +39,11 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
 .msg.ok{background:rgba(31,157,99,.14);color:var(--ok)}
 .msg.no{background:rgba(194,65,12,.14);color:var(--warn)}
 .note{font-size:12px;color:var(--mute);margin-top:18px;display:flex;flex-direction:column;gap:4px}
-.signature{font-weight:700;color:var(--accent)}
-@media (max-width:420px){.row{grid-template-columns:1fr}}
+@media (max-width:480px){
+  .row{grid-template-columns:1fr}
+  h1{font-size:20px}
+  main{padding:16px 12px 30px}
+}
 </style>
 </head>
 <body>
@@ -76,7 +79,7 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
   </div>
   <div class="note">
     <span>Versión web de la calculadora de Excel que armé para seguir mi CSAT y que compartí con mis compañeros para entender las métricas.</span>
-    <span class="signature">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
+    <span style="font-weight:700; color:var(--accent);">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
   </div>
 </main>
 <script>
@@ -110,48 +113,147 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
     updateThemeButton();
   });
 
-  // Función para descargar PDF directo usando jsPDF
+  // Generador de PDF robusto y responsive
   pdfBtn.addEventListener('click', function(){
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
 
-    // Recolectar datos actuales
-    const neg = $('neg').value;
-    const pos = $('pos').value;
-    const obj = $('obj').value;
-    const pct = $('pct').textContent;
-    const tot = $('tot').textContent;
-    const need = $('need').textContent;
-    const miss = $('miss').textContent;
-    const msgText = $('msg').textContent;
+      const neg = $('neg').value;
+      const pos = $('pos').value;
+      const obj = $('obj').value;
+      const pct = $('pct').textContent;
+      const tot = $('tot').textContent;
+      const need = $('need').textContent;
+      const miss = $('miss').textContent;
+      const msgText = $('msg').textContent;
 
-    // Estilo del PDF
-    doc.setFont("Helvetica", "bold");
-    doc.setFontSize(16);
-    doc.setTextColor(214, 69, 122); // Color accent rosa
-    doc.text("Calculadora de métricas CSAT", 20, 20);
+      // Título
+      doc.setFont("Helvetica", "bold");
+      doc.setFontSize(16);
+      doc.setTextColor(214, 69, 122);
+      doc.text("Calculadora de métricas CSAT", 15, 20);
 
-    doc.setFontSize(10);
-    doc.setTextColor(140, 107, 125);
-    doc.text("Reporte de rendimiento y objetivos", 20, 28);
+      doc.setFontSize(10);
+      doc.setTextColor(140, 107, 125);
+      doc.text("Reporte de rendimiento y objetivos", 15, 27);
 
-    // Línea divisoria
-    doc.setDrawColor(243, 209, 223);
-    doc.line(20, 34, 190, 34);
+      // Línea divisoria
+      doc.setDrawColor(243, 209, 223);
+      doc.line(15, 32, 195, 32);
 
-    // Datos ingresados
-    doc.setFontSize(12);
-    doc.setTextColor(45, 27, 36);
-    doc.text("Parametros ingresados:", 20, 46);
-    doc.setFont("Helvetica", "normal");
-    doc.text(`- Valoraciones Negativas: ${neg}`, 25, 54);
-    doc.text(`- Valoraciones Positivas: ${pos}`, 25, 62);
-    doc.text(`- Objetivo configurado: ${obj}%`, 25, 70);
+      // Sección Parámetros
+      doc.setFont("Helvetica", "bold");
+      doc.setFontSize(11);
+      doc.setTextColor(45, 27, 36);
+      doc.text("Parámetros ingresados:", 15, 42);
 
-    // Resultados
-    doc.setFont("Helvetica", "bold");
-    doc.text("Resultados del calculo:", 20, 86);
-    doc.setFont("Helvetica", "normal");
-    doc.text(`- Porcentaje actual de CSAT: ${pct}`, 25, 94);
-    doc.text(`- Total de valoraciones: ${tot}`, 25, 102);
-    doc.text(`- Positivas necesarias en total: ${need}`, 
+      doc.setFont("Helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`• Valoraciones Negativas: ${neg}`, 20, 50);
+      doc.text(`• Valoraciones Positivas: ${pos}`, 20, 58);
+      doc.text(`• Objetivo configurado: ${obj}%`, 20, 66);
+
+      // Sección Resultados
+      doc.setFont("Helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("Resultados del cálculo:", 15, 80);
+
+      doc.setFont("Helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`• Porcentaje actual de CSAT: ${pct}`, 20, 88);
+      doc.text(`• Total de valoraciones: ${tot}`, 20, 96);
+      doc.text(`• Positivas necesarias en total: ${need}`, 20, 104);
+      doc.text(`• Positivas extra que faltan sumar: ${miss}`, 20, 112);
+
+      // Sección Estado del objetivo
+      doc.setFont("Helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("Estado del objetivo:", 15, 126);
+
+      doc.setFont("Helvetica", "normal");
+      doc.setFontSize(10);
+      const splitMsg = doc.splitTextToSize(msgText, 175);
+      doc.text(splitMsg, 20, 134);
+
+      // Firma al pie
+      doc.setFontSize(9);
+      doc.setTextColor(214, 69, 122);
+      doc.text("Diseñado para entender y mejorar métricas By Flor Bagnis ❤️", 15, 160);
+
+      // Descarga directa
+      doc.save("Reporte_CSAT_Flor_Bagnis.pdf");
+    } catch (e) {
+      alert("Hubo un error al generar el PDF. Asegurate de tener conexión a internet para cargar la librería.");
+    }
+  });
+
+  function calc(){
+    var negInput = $('neg');
+    var posInput = $('pos');
+
+    if(negInput.value.trim() === '') { negInput.value = '0'; }
+    if(posInput.value.trim() === '') { posInput.value = '0'; }
+
+    var n = Math.max(0, Math.floor(+negInput.value || 0)),
+        p = Math.max(0, Math.floor(+posInput.value || 0)),
+        raw = parseFloat(String($('obj').value).replace(',','.')),
+        op = Math.min(100, Math.max(1, isNaN(raw) ? 94 : raw)),
+        o = op / 100, 
+        t = n + p,
+        label = String(op).replace('.',',') + '%';
+        
+    var pct = t > 0 ? p / t : 0;
+    
+    $('pct').textContent = t > 0 ? (pct * 100).toFixed(2).replace('.',',') + '\%' : '–';$('tot').textContent = t;
+    
+    var m = $('msg'), need, miss;
+    
+    if (t === 0) {
+      need = 0;
+      miss = 0;
+    } else if (o >= 1) {
+      if (n === 0) { need = 0; miss = 0; } else { need = null; miss = null; }
+    } else {
+      need = Math.ceil(n * o / (1 - o) - 1e-9);
+      miss = Math.max(0, need - p);
+    }
+    
+    $('need').textContent = need === null ? '–' : need;
+    $('miss').textContent = miss === null ? '–' : miss;
+    
+    if (t === 0) {
+      m.className = 'msg ok';
+      m.textContent = 'Cargá valoraciones para calcular.';
+    } else if (need === null) {
+      m.className = 'msg no';
+      m.textContent = 'Para llegar al 100% no puede haber valoraciones negativas. Con las negativas cargadas ya no es alcanzable.';
+    } else if (miss === 0) {
+      m.className = 'msg ok';
+      m.textContent = 'Ya alcanzás el objetivo del ' + label + '. No necesitás positivas extra.';
+    } else {
+      m.className = 'msg no';
+      m.textContent = 'Te faltan ' + miss + ' valoraci' + (miss === 1 ? 'ón' : 'ones') + ' positiva' + (miss === 1 ? '' : 's') + ' para llegar al ' + label + '.';
+    }
+    
+    var bs = document.querySelectorAll('.presets button');
+    for (var i = 0; i < bs.length; i++) {
+      bs[i].className = (parseFloat(bs[i].getAttribute('data-o')) === op) ? 'on' : '';
+    }
+  }
+
+  ['neg','pos','obj'].forEach(function(i){ $(i).addEventListener('input', calc) });
+  
+  var bs = document.querySelectorAll('.presets button');
+  for (var i = 0; i < bs.length; i++) {
+    bs[i].addEventListener('click', function(){
+      $('obj').value = this.getAttribute('data-o');
+      calc();
+    });
+  }
+  
+  calc();
+})();
+</script>
+</body>
+</html>
