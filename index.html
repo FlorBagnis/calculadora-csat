@@ -38,6 +38,12 @@ input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px so
 .note{font-size:12px;color:var(--mute);margin-top:18px;display:flex;flex-direction:column;gap:4px}
 .signature{font-weight:700;color:var(--accent)}
 @media (max-width:480px){.row{grid-template-columns:1fr}h1{font-size:20px}}
+.pdf-wrap{position:absolute;top:0;left:0;z-index:-1;pointer-events:none}
+.pdf-mode{width:794px;max-width:none;padding:36px}
+.pdf-mode h1{font-size:28px}
+.pdf-mode p.sub{font-size:15px}
+.pdf-mode .row{grid-template-columns:1fr 1fr 1fr}
+.pdf-mode .res{grid-template-columns:1fr 1fr}
 </style>
 </head>
 <body>
@@ -97,23 +103,35 @@ input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px so
     updateThemeButton();
   });
 
-  // Exporta el PDF con el tamaño exacto del contenido: sin hojas A4, sin márgenes, sin blancos.
-  // .save() descarga directo, no abre el diálogo de impresión.
+  // Exporta el PDF desde una copia con layout fijo de escritorio (794px), así sale igual
+  // en celular y en compu. Página a medida del contenido: sin blancos. Descarga directa.
   function generateCsatPDF(){
-    var el=$('pdfArea');
-    var bg=getComputedStyle(el).backgroundColor;
+    var src=$('pdfArea');
+    var bg=getComputedStyle(src).backgroundColor;
+    var wrap=document.createElement('div');
+    wrap.className='pdf-wrap';
+    var clone=src.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.classList.add('pdf-mode');
+    var ar=clone.querySelector('.actions-row'); if(ar) ar.remove();
+    ['neg','pos','obj'].forEach(function(id){
+      var c=clone.querySelector('#'+id); if(c){c.setAttribute('value',$(id).value);c.value=$(id).value;}
+    });
+    wrap.appendChild(clone);
+    document.body.appendChild(wrap);
     window.scrollTo(0,0);
-    var w=Math.ceil(el.offsetWidth), h=Math.ceil(el.offsetHeight);
 
+    var w=Math.ceil(clone.offsetWidth), h=Math.ceil(clone.offsetHeight);
     var opt={
       margin:0,
       filename:'Reporte_CSAT_Flor_Bagnis.pdf',
       image:{type:'jpeg',quality:0.98},
       html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0,width:w,height:h,windowWidth:w},
-      jsPDF:{unit:'px',format:[w,h],orientation:'portrait',hotfixes:['px_scaling']},
+      jsPDF:{unit:'px',format:[w,h],orientation:(w>h?'landscape':'portrait'),hotfixes:['px_scaling']},
       pagebreak:{mode:[]}
     };
-    html2pdf().set(opt).from(el).save();
+    var done=function(){ wrap.remove(); };
+    html2pdf().set(opt).from(clone).save().then(done,done);
   }
   $('pdfBtn').addEventListener('click',generateCsatPDF);
 
