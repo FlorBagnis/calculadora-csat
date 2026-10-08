@@ -126,267 +126,100 @@ input{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border:1px so
   });
 
   // PDF estilo "Mensuales": hoja A4 vertical con tarjetas y tabla, en los colores del tema activo.
-  <script>
-function generateCsatPDF(){
-  var n = Math.max(0, Math.floor(+$('neg').value || 0)),
-      p = Math.max(0, Math.floor(+$('pos').value || 0)),
-      raw = parseFloat(String($('obj').value).replace(',', '.')),
-      op = Math.min(100, Math.max(1, isNaN(raw) ? 94 : raw)),
-      label = String(op).replace('.', ',') + '%',
-      pct = $('pct').textContent,
-      tot = $('tot').textContent,
-      need = $('need').textContent,
-      miss = $('miss').textContent,
-      msg = $('msg').textContent;
+  function generateCsatPDF(){
+    var n=Math.max(0,Math.floor(+$('neg').value||0)),
+        p=Math.max(0,Math.floor(+$('pos').value||0)),
+        raw=parseFloat(String($('obj').value).replace(',','.')),
+        op=Math.min(100,Math.max(1,isNaN(raw)?94:raw)),
+        label=String(op).replace('.',',')+'%',
+        pct=$('pct').textContent, tot=$('tot').textContent,
+        need=$('need').textContent, miss=$('miss').textContent,
+        msg=$('msg').textContent;
+    var fecha=new Date().toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+    fecha=fecha.charAt(0).toUpperCase()+fecha.slice(1);
 
-  var fecha = new Date().toLocaleDateString('es-AR', {
-    month: 'long',
-    year: 'numeric'
-  });
+    var html=
+      '<div class="pdf-page">'+
+        '<h1>Calculadora de métricas CSAT</h1>'+
+        '<p class="psub">Reporte - '+fecha+'</p>'+
+        '<div class="pdf-kpis">'+
+          '<div class="pdf-kpi"><div class="l">CSAT actual</div><div class="v">'+pct+'</div></div>'+
+          '<div class="pdf-kpi"><div class="l">Valoraciones</div><div class="v">'+tot+'</div></div>'+
+          '<div class="pdf-kpi"><div class="l">Objetivo</div><div class="v">'+label+'</div></div>'+
+          '<div class="pdf-kpi"><div class="l">Te faltan</div><div class="v">'+miss+'</div></div>'+
+        '</div>'+
+        '<table class="pdf-table"><thead><tr><th>MÉTRICA</th><th>DETALLE</th><th>VALOR</th></tr></thead><tbody>'+
+          '<tr><td>Valoraciones positivas</td><td class="m">Cargadas</td><td>'+p+'</td></tr>'+
+          '<tr><td>Valoraciones negativas</td><td class="m">Cargadas</td><td>'+n+'</td></tr>'+
+          '<tr><td>Total de valoraciones</td><td class="m">Positivas + negativas</td><td>'+tot+'</td></tr>'+
+          '<tr><td>Objetivo de CSAT</td><td class="m">Meta definida</td><td>'+label+'</td></tr>'+
+          '<tr><td>Positivas necesarias</td><td class="m">En total para el objetivo</td><td>'+need+'</td></tr>'+
+          '<tr><td>Positivas extra</td><td class="m">Que faltan sumar</td><td>'+miss+'</td></tr>'+
+        '</tbody></table>'+
+        '<div class="pdf-h2">Resumen del período</div>'+
+        '<div class="pdf-box"><div class="t">Análisis de resultados</div>'+
+          '<p>Con '+tot+' valoraciones registradas ('+p+' positivas y '+n+' negativas), tu CSAT actual es de '+pct+'. '+msg+'</p></div>'+
+        '<div class="pdf-foot">CSAT - Creado por Flor Bagnis</div>'+
+      '</div>';
 
-  fecha = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+    var wrap=document.createElement('div');
+    wrap.className='pdf-wrap';
+    wrap.innerHTML=html;
+    document.body.appendChild(wrap);
+    window.scrollTo(0,0);
+    var page=wrap.firstChild;
+    var bg=getComputedStyle(page).backgroundColor;
 
-  /*
-   * El PDF se genera siempre en formato A4.
-   * El tamaño de render se adapta al dispositivo:
-   * - PC: mayor resolución
-   * - Tablet: resolución intermedia
-   * - Celular: resolución optimizada
-   */
+    var opt={
+      margin:0,
+      filename:'Reporte_CSAT_Flor_Bagnis.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0,width:794,height:1122,windowWidth:794},
+      jsPDF:{unit:'px',format:[794,1123],orientation:'portrait',hotfixes:['px_scaling']},
+      pagebreak:{mode:[]}
+    };
+    var done=function(){ wrap.remove(); };
+    html2pdf().set(opt).from(page).toPdf().get('pdf').then(function(pdf){
+      // por redondeo puede sobrar una hoja vacía: se elimina
+      while(pdf.internal.getNumberOfPages()>1){ pdf.deletePage(pdf.internal.getNumberOfPages()); }
+    }).save().then(done,done);
+  }
+  $('pdfBtn').addEventListener('click',generateCsatPDF);
 
-  var screenWidth = window.innerWidth || document.documentElement.clientWidth;
-
-  var renderScale;
-
-  if (screenWidth <= 480) {
-    renderScale = 2.2;
-  } else if (screenWidth <= 900) {
-    renderScale = 2;
-  } else {
-    renderScale = 2;
+  function calc(){
+    var ni=$('neg'), pi=$('pos');
+    if(ni.value.trim()==='') ni.value='0';
+    if(pi.value.trim()==='') pi.value='0';
+    var n=Math.max(0,Math.floor(+ni.value||0)),
+        p=Math.max(0,Math.floor(+pi.value||0)),
+        raw=parseFloat(String($('obj').value).replace(',','.')),
+        op=Math.min(100,Math.max(1,isNaN(raw)?94:raw)),
+        o=op/100, t=n+p,
+        label=String(op).replace('.',',')+'%';
+    var pct=t>0?p/t:0;
+    $('pct').textContent=t>0?(pct*100).toFixed(2).replace('.',',')+'%':'–';
+    $('tot').textContent=t;
+    var m=$('msg'), need, miss;
+    if(t===0){need=0;miss=0;}
+    else if(o>=1){ if(n===0){need=0;miss=0;} else {need=null;miss=null;} }
+    else { need=Math.ceil(n*o/(1-o)-1e-9); miss=Math.max(0,need-p); }
+    $('need').textContent=need===null?'–':need;
+    $('miss').textContent=miss===null?'–':miss;
+    if(t===0){m.className='msg ok';m.textContent='Cargá valoraciones para calcular.';}
+    else if(need===null){m.className='msg no';m.textContent='Para llegar al 100% no puede haber valoraciones negativas. Con las negativas cargadas ya no es alcanzable.';}
+    else if(miss===0){m.className='msg ok';m.textContent='Ya alcanzás el objetivo del '+label+'. No necesitás positivas extra.';}
+    else {m.className='msg no';m.textContent='Te faltan '+miss+' valoraci'+(miss===1?'ón':'ones')+' positiva'+(miss===1?'':'s')+' para llegar al '+label+'.';}
+    var bs=document.querySelectorAll('.presets button');
+    for(var i=0;i<bs.length;i++) bs[i].className=(parseFloat(bs[i].getAttribute('data-o'))===op)?'on':'';
   }
 
-  var html =
-    '<div class="pdf-page">' +
-
-      '<h1>Calculadora de métricas CSAT</h1>' +
-
-      '<p class="psub">Reporte - ' + fecha + '</p>' +
-
-      '<div class="pdf-kpis">' +
-
-        '<div class="pdf-kpi">' +
-          '<div class="l">CSAT actual</div>' +
-          '<div class="v">' + pct + '</div>' +
-        '</div>' +
-
-        '<div class="pdf-kpi">' +
-          '<div class="l">Valoraciones</div>' +
-          '<div class="v">' + tot + '</div>' +
-        '</div>' +
-
-        '<div class="pdf-kpi">' +
-          '<div class="l">Objetivo</div>' +
-          '<div class="v">' + label + '</div>' +
-        '</div>' +
-
-        '<div class="pdf-kpi">' +
-          '<div class="l">Te faltan</div>' +
-          '<div class="v">' + miss + '</div>' +
-        '</div>' +
-
-      '</div>' +
-
-      '<table class="pdf-table">' +
-
-        '<thead>' +
-          '<tr>' +
-            '<th>MÉTRICA</th>' +
-            '<th>DETALLE</th>' +
-            '<th>VALOR</th>' +
-          '</tr>' +
-        '</thead>' +
-
-        '<tbody>' +
-
-          '<tr>' +
-            '<td>Valoraciones positivas</td>' +
-            '<td class="m">Cargadas</td>' +
-            '<td>' + p + '</td>' +
-          '</tr>' +
-
-          '<tr>' +
-            '<td>Valoraciones negativas</td>' +
-            '<td class="m">Cargadas</td>' +
-            '<td>' + n + '</td>' +
-          '</tr>' +
-
-          '<tr>' +
-            '<td>Total de valoraciones</td>' +
-            '<td class="m">Positivas + negativas</td>' +
-            '<td>' + tot + '</td>' +
-          '</tr>' +
-
-          '<tr>' +
-            '<td>Objetivo de CSAT</td>' +
-            '<td class="m">Meta definida</td>' +
-            '<td>' + label + '</td>' +
-          '</tr>' +
-
-          '<tr>' +
-            '<td>Positivas necesarias</td>' +
-            '<td class="m">En total para el objetivo</td>' +
-            '<td>' + need + '</td>' +
-          '</tr>' +
-
-          '<tr>' +
-            '<td>Positivas extra</td>' +
-            '<td class="m">Que faltan sumar</td>' +
-            '<td>' + miss + '</td>' +
-          '</tr>' +
-
-        '</tbody>' +
-
-      '</table>' +
-
-      '<div class="pdf-h2">Resumen del período</div>' +
-
-      '<div class="pdf-box">' +
-        '<div class="t">Análisis de resultados</div>' +
-        '<p>' +
-          'Con ' + tot +
-          ' valoraciones registradas (' + p +
-          ' positivas y ' + n +
-          ' negativas), tu CSAT actual es de ' +
-          pct + '. ' + msg +
-        '</p>' +
-      '</div>' +
-
-      '<div class="pdf-foot">' +
-        'CSAT - Creado por Flor Bagnis' +
-      '</div>' +
-
-    '</div>';
-
-  var wrap = document.createElement('div');
-
-  wrap.className = 'pdf-wrap';
-
-  /*
-   * El contenedor queda fuera de la pantalla,
-   * pero mantiene las dimensiones exactas de A4.
-   */
-  wrap.style.position = 'fixed';
-  wrap.style.left = '0';
-  wrap.style.top = '0';
-  wrap.style.width = '794px';
-  wrap.style.height = '1122px';
-  wrap.style.zIndex = '9999';
-  wrap.style.pointerEvents = 'none';
-
-  wrap.innerHTML = html;
-
-  document.body.appendChild(wrap);
-
-  var page = wrap.firstChild;
-
-  /*
-   * Aseguramos que el navegador calcule todos los estilos
-   * antes de realizar la captura.
-   */
-  requestAnimationFrame(function(){
-
-    var bg = getComputedStyle(page).backgroundColor;
-
-    var opt = {
-
-      margin: 0,
-
-      filename: 'Reporte_CSAT_Flor_Bagnis.pdf',
-
-      image: {
-        type: 'jpeg',
-        quality: 0.98
-      },
-
-      html2canvas: {
-
-        scale: renderScale,
-
-        useCORS: true,
-
-        allowTaint: false,
-
-        backgroundColor: bg,
-
-        scrollX: 0,
-        scrollY: 0,
-
-        width: 794,
-        height: 1122,
-
-        windowWidth: 794,
-        windowHeight: 1122,
-
-        logging: false
-      },
-
-      /*
-       * IMPORTANTE:
-       * ahora usamos A4 real en lugar de px.
-       */
-      jsPDF: {
-
-        unit: 'mm',
-
-        format: 'a4',
-
-        orientation: 'portrait',
-
-        compress: true
-      },
-
-      pagebreak: {
-        mode: []
-      }
-    };
-
-    html2pdf()
-      .set(opt)
-      .from(page)
-      .toPdf()
-      .get('pdf')
-      .then(function(pdf){
-
-        /*
-         * Evita que quede una segunda página vacía.
-         */
-        while(pdf.internal.getNumberOfPages() > 1){
-
-          pdf.deletePage(
-            pdf.internal.getNumberOfPages()
-          );
-
-        }
-
-      })
-      .save()
-      .then(function(){
-
-        wrap.remove();
-
-      })
-      .catch(function(error){
-
-        console.error('Error al generar el PDF:', error);
-
-        wrap.remove();
-
-      });
-
-  });
-}
-</script>
+  ['neg','pos','obj'].forEach(function(i){$(i).addEventListener('input',calc)});
+  var bs=document.querySelectorAll('.presets button');
+  for(var i=0;i<bs.length;i++){
+    bs[i].addEventListener('click',function(){$('obj').value=this.getAttribute('data-o');calc();});
+  }
+  calc();
+})();
 </script>
 </body>
 </html>
