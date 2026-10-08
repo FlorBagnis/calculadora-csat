@@ -5,14 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
 <style>
-:root{--bg:#f4f6fa;--card:#fff;--ink:#1b2540;--mute:#6b7280;--line:#dde1e8;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
+:root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}}
 :root[data-theme="dark"]{--bg:#0f1420;--card:#171e2e;--ink:#eef1f7;--mute:#9aa3b5;--line:#2a3347;--accent:#f06a9b;--ok:#3ecf8e;--warn:#fb923c}
+:root[data-theme="light"]{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45}
 main{max-width:560px;margin:0 auto;padding:28px 18px 40px}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.theme-toggle{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.theme-toggle:hover{border-color:var(--accent)}
 .tag{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
 h1{font-size:24px;margin:6px 0 6px}
 p.sub{color:var(--mute);margin:0 0 20px;font-size:14px}
@@ -37,8 +41,13 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
 </head>
 <body>
 <main>
-  <div class="tag">HERRAMIENTA DE SOPORTE</div>
-  <h1>Calculadora de métricas CSAT</h1>
+  <div class="header-row">
+    <div>
+      <div class="tag">HERRAMIENTA DE SOPORTE</div>
+      <h1>Calculadora de métricas CSAT</h1>
+    </div>
+    <button type="button" id="themeBtn" class="theme-toggle" aria-label="Cambiar tema">🌸 Modo Claro</button>
+  </div>
   <p class="sub">Cargá las valoraciones negativas y positivas: calcula tu porcentaje actual y cuántas positivas te faltan para llegar al objetivo.</p>
   <div class="card">
     <div class="row">
@@ -63,6 +72,34 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
+  
+  // Lógica del selector de tema (guarda la preferencia en localStorage)
+  var htmlEl = document.documentElement;
+  var themeBtn = $('themeBtn');
+  var savedTheme = localStorage.getItem('csat_theme');
+  
+  if(savedTheme){
+    htmlEl.setAttribute('data-theme', savedTheme);
+  }
+  
+  function updateThemeButton(){
+    var current = htmlEl.getAttribute('data-theme');
+    if(current === 'light'){
+      themeBtn.textContent = '🌙 Modo Oscuro';
+    } else {
+      themeBtn.textContent = '🌸 Modo Claro';
+    }
+  }
+  updateThemeButton();
+
+  themeBtn.addEventListener('click', function(){
+    var current = htmlEl.getAttribute('data-theme');
+    var next = (current === 'light') ? 'dark' : 'light';
+    htmlEl.setAttribute('data-theme', next);
+    localStorage.setItem('csat_theme', next);
+    updateThemeButton();
+  });
+
   function calc(){
     var n=Math.max(0,Math.floor(+$('neg').value||0)),
         p=Math.max(0,Math.floor(+$('pos').value||0)),
