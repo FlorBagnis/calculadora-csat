@@ -1,6 +1,6 @@
 # 📊 Calculadora de Métricas CSAT
 
-<img width="747" height="831" alt="image" src="https://github.com/user-attachments/assets/7653e12e-04b0-45be-8e4c-0863718c54e9" />
+<img width="786" height="839" alt="image" src="https://github.com/user-attachments/assets/9f5391c2-da40-4d63-b48b-d63401aab941" />
 
 Aplicación web desarrollada como proyecto personal para que los equipos de **Customer Support** puedan entender, seguir y mejorar su métrica de satisfacción del cliente (**CSAT**).
 
