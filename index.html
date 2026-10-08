@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Calculadora de métricas CSAT · Florencia Bagnis</title>
-<!-- Librería jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Librería html2pdf para descarga directa y fiel al diseño -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root{--bg:#fff0f5;--card:#ffffff;--ink:#2d1b24;--mute:#8c6b7d;--line:#f3d1df;--accent:#d6457a;--ok:#1f9d63;--warn:#c2410c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -15,9 +15,9 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;line-height:1.45}
-main{max-width:560px;width:100%;margin:0 auto;padding:28px 16px 40px}
+main{max-width:560px;width:100%;margin:0 auto;padding:28px 18px 40px}
 .header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.actions-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.actions-row{display:flex;gap:8px;align-items:center}
 .btn-action{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0}
 .btn-action:hover{border-color:var(--accent)}
 .tag{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
@@ -39,15 +39,17 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
 .msg.ok{background:rgba(31,157,99,.14);color:var(--ok)}
 .msg.no{background:rgba(194,65,12,.14);color:var(--warn)}
 .note{font-size:12px;color:var(--mute);margin-top:18px;display:flex;flex-direction:column;gap:4px}
+.signature{font-weight:700;color:var(--accent)}
+
 @media (max-width:480px){
   .row{grid-template-columns:1fr}
-  h1{font-size:20px}
+  h1{font-size:21px}
   main{padding:16px 12px 30px}
 }
 </style>
 </head>
 <body>
-<main>
+<main id="captureArea">
   <div class="header-row">
     <div>
       <div class="tag">HERRAMIENTA DE SOPORTE</div>
@@ -79,7 +81,7 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
   </div>
   <div class="note">
     <span>Versión web de la calculadora de Excel que armé para seguir mi CSAT y que compartí con mis compañeros para entender las métricas.</span>
-    <span style="font-weight:700; color:var(--accent);">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
+    <span class="signature">Diseñado para entender y mejorar métricas By Flor Bagnis ❤️</span>
   </div>
 </main>
 <script>
@@ -113,79 +115,28 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
     updateThemeButton();
   });
 
-  // Generador de PDF robusto y responsive
+  // Descarga directa a PDF respetando colores y diseño actual
   pdfBtn.addEventListener('click', function(){
-    try {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+    var element = $('captureArea');
+    
+    // Ocultamos temporalmente los botones de acción para que el PDF salga limpio
+    var actionsRow = document.querySelector('.actions-row');
+    actionsRow.style.display = 'none';
 
-      const neg = $('neg').value;
-      const pos = $('pos').value;
-      const obj = $('obj').value;
-      const pct = $('pct').textContent;
-      const tot = $('tot').textContent;
-      const need = $('need').textContent;
-      const miss = $('miss').textContent;
-      const msgText = $('msg').textContent;
+    var opt = {
+      margin:       10,
+      filename:     'Reporte_CSAT_Flor_Bagnis.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: null },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
 
-      // Título
-      doc.setFont("Helvetica", "bold");
-      doc.setFontSize(16);
-      doc.setTextColor(214, 69, 122);
-      doc.text("Calculadora de métricas CSAT", 15, 20);
-
-      doc.setFontSize(10);
-      doc.setTextColor(140, 107, 125);
-      doc.text("Reporte de rendimiento y objetivos", 15, 27);
-
-      // Línea divisoria
-      doc.setDrawColor(243, 209, 223);
-      doc.line(15, 32, 195, 32);
-
-      // Sección Parámetros
-      doc.setFont("Helvetica", "bold");
-      doc.setFontSize(11);
-      doc.setTextColor(45, 27, 36);
-      doc.text("Parámetros ingresados:", 15, 42);
-
-      doc.setFont("Helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(`• Valoraciones Negativas: ${neg}`, 20, 50);
-      doc.text(`• Valoraciones Positivas: ${pos}`, 20, 58);
-      doc.text(`• Objetivo configurado: ${obj}%`, 20, 66);
-
-      // Sección Resultados
-      doc.setFont("Helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text("Resultados del cálculo:", 15, 80);
-
-      doc.setFont("Helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(`• Porcentaje actual de CSAT: ${pct}`, 20, 88);
-      doc.text(`• Total de valoraciones: ${tot}`, 20, 96);
-      doc.text(`• Positivas necesarias en total: ${need}`, 20, 104);
-      doc.text(`• Positivas extra que faltan sumar: ${miss}`, 20, 112);
-
-      // Sección Estado del objetivo
-      doc.setFont("Helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text("Estado del objetivo:", 15, 126);
-
-      doc.setFont("Helvetica", "normal");
-      doc.setFontSize(10);
-      const splitMsg = doc.splitTextToSize(msgText, 175);
-      doc.text(splitMsg, 20, 134);
-
-      // Firma al pie
-      doc.setFontSize(9);
-      doc.setTextColor(214, 69, 122);
-      doc.text("Diseñado para entender y mejorar métricas By Flor Bagnis ❤️", 15, 160);
-
-      // Descarga directa
-      doc.save("Reporte_CSAT_Flor_Bagnis.pdf");
-    } catch (e) {
-      alert("Hubo un error al generar el PDF. Asegurate de tener conexión a internet para cargar la librería.");
-    }
+    html2pdf().from(element).set(opt).save().then(function(){
+      // Volvemos a mostrar los botones una vez generado el PDF
+      actionsRow.style.display = 'flex';
+    }).catch(function(){
+      actionsRow.style.display = 'flex';
+    });
   });
 
   function calc(){
@@ -205,7 +156,8 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
         
     var pct = t > 0 ? p / t : 0;
     
-    $('pct').textContent = t > 0 ? (pct * 100).toFixed(2).replace('.',',') + '\%' : '–';$('tot').textContent = t;
+    $('pct').textContent = t > 0 ? (pct * 100).toFixed(2).replace('.',',') + '%' : '–';
+    $('tot').textContent = t;
     
     var m = $('msg'), need, miss;
     
@@ -238,20 +190,13 @@ input{width:100%;font-size:18px;padding:10px;border:1px solid var(--line);border
     
     var bs = document.querySelectorAll('.presets button');
     for (var i = 0; i < bs.length; i++) {
-      bs[i].className = (parseFloat(bs[i].getAttribute('data-o')) === op) ? 'on' : '';
+      bs[i].className = (parseFloat(bs[i].getAttribute('data-o'))===op)?'on':'';
     }
   }
 
-  ['neg','pos','obj'].forEach(function(i){ $(i).addEventListener('input', calc) });
-  
+  ['neg','pos','obj'].forEach(function(i){$(i).addEventListener('input',calc)});
   var bs = document.querySelectorAll('.presets button');
-  for (var i = 0; i < bs.length; i++) {
-    bs[i].addEventListener('click', function(){
-      $('obj').value = this.getAttribute('data-o');
-      calc();
-    });
-  }
-  
+  for(var i=0;i<bs.length;i++){bs[i].addEventListener('click',function(){$('obj').value=this.getAttribute('data-o');calc();});}
   calc();
 })();
 </script>
